@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/anaxm/Documents/Ing1/PDS/com.sun.rowset.jar"/>
+	<classpathentry kind="lib" path="C:/Users/anaxm/Documents/Ing1/PDS/gson-2.6.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/anaxm/Documents/Ing1/PDS/gson-2.6.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/anaxm/Documents/Ing1/PDS/gson-2.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/anaxm/Documents/Ing1/PDS/jackson-databind-2.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/anaxm/Documents/Ing1/PDS/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/anaxm/Documents/Ing1/PDS/mysql-connector-java-5.1.46/mysql-connector-java-5.1.46.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
