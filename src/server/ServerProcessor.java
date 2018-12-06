@@ -41,7 +41,34 @@ public class ServerProcessor implements Runnable {
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				String demand = read();
 				switch(demand.toUpperCase()){
-				
+				case "TEST":
+					//Server understands the action asked, he returns "OK"
+					String toSend = "OK for insert";
+					//the Server waits for the data
+					writer.write(toSend);
+					writer.flush();
+					//the server read the data
+					String request = read();
+					Test t1 = gson.fromJson(request, Test.class);
+					TestDAO testInsert = new TestDAO(connection.getConnection());
+					Test eCheck = testInsert.find(t1.getId());
+					if(eCheck == null)
+					{
+						testInsert.create(t1);
+						Test t2 = testInsert.find(t1.getId());
+						String reponseServ = "Nouvel enregistrement numéro" + t1.getId()+ " bien ajouté, merci !";
+						writer.write(reponseServ);
+						writer.flush();
+
+					}
+					else
+					{
+						String reponseServ = "Impossible de créer l'objet en question, l'id "+ t1.getId() +" est déjà utilisé";
+						writer.write(reponseServ);
+						writer.flush();
+					}
+					connection.releaseConnection(connection.getListUsed().get(connection.getListUsed().size()-1));
+					break;
 				}
 			}catch (IOException /**| SQLException*/ e){
 				e.printStackTrace();

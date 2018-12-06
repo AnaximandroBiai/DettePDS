@@ -5,10 +5,17 @@ package pojo;
  * This is the test data model
  */
 public class Test {
+	private int id;
 	private String nom;
 	private String prenom;
 	
 	public Test (String nom, String prenom) {
+		this.nom = nom;
+		this.prenom = prenom;
+	}
+	
+	public Test (int id, String nom, String prenom) {
+		this.id = id;
 		this.nom = nom;
 		this.prenom = prenom;
 	}
@@ -24,5 +31,13 @@ public class Test {
 	}
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
