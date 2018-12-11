@@ -28,7 +28,7 @@ public class TestDAO extends Dao<Test>{
 	@Override
 	public boolean create(Test obj) {
 		   try{
-	            this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeUpdate("INSERT INTO test(nom, prenom) values ("+obj.getNom()+",'"+obj.getPrenom()+"')");
+	            this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeUpdate("INSERT INTO test(lastname, firstname) values (\'"+obj.getLastName()+"\',\'"+obj.getFirstName()+"\')");
 	            return true;
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -49,17 +49,23 @@ public class TestDAO extends Dao<Test>{
 	}
 
 	@Override
-	public Test find(int id) {
+	public Test find(String lName, String fName) {
 		  try{
-	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT id, nom, prenom FROM Test Where id="+ id);
-	            while(result.next()){
-	                Test t = new Test(result.getInt("id"),result.getString("nom"), result.getString("prenom"));
+	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT id, lastname, firstname FROM test Where lastname='"+lName+"' and firstname='"+fName+"'");
+	            while(result.next()) {
+	            	Test t = new Test(result.getInt("id"), result.getString("lastname"), result.getString("firstname"));
 	                return t;
 	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
 	        return null;
+	}
+
+	@Override
+	public Test find(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

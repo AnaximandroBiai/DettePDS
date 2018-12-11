@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.Connection;
+
+import pojo.Test;
 /**
  * @author anax
  * @param <T>
@@ -41,4 +43,9 @@ protected Connection connect = null;
 	 * @return
 	 */
 	public abstract T find(int id);
+	
+	public Test find(String nom, String prenom) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

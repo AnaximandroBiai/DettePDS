@@ -4,7 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.SQLException;
+//import java.sql.SQLException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,7 +33,7 @@ public class ServerProcessor implements Runnable {
 
 	@Override
 	public void run() {
-		boolean closeConnection = false;
+		//boolean closeConnection = false;
 		while(!sock.isClosed()) {
 			try {
 				writer = new PrintWriter(sock.getOutputStream());
@@ -51,19 +51,18 @@ public class ServerProcessor implements Runnable {
 					String request = read();
 					Test t1 = gson.fromJson(request, Test.class);
 					TestDAO testInsert = new TestDAO(connection.getConnection());
-					Test eCheck = testInsert.find(t1.getId());
+					Test eCheck = testInsert.find(t1.getLastName(),t1.getFirstName());
 					if(eCheck == null)
 					{
 						testInsert.create(t1);
-						Test t2 = testInsert.find(t1.getId());
-						String reponseServ = "Nouvel enregistrement num√©ro" + t1.getId()+ " bien ajout√©, merci !";
+						String reponseServ = "Monsieur " + t1.getFirstName()+ " "+t1.getLastName()+" a bien ÈtÈ ajoutÈ, merci !";
 						writer.write(reponseServ);
 						writer.flush();
 
 					}
 					else
 					{
-						String reponseServ = "Impossible de cr√©er l'objet en question, l'id "+ t1.getId() +" est d√©j√† utilis√©";
+						String reponseServ = "Impossible d'ajouter la personne, Monsieur "+ t1.getLastName() +" "+t1.getFirstName()+ " est dÈj‡† enregistrÈe";
 						writer.write(reponseServ);
 						writer.flush();
 					}

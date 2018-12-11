@@ -6,31 +6,31 @@ package pojo;
  */
 public class Test {
 	private int id;
-	private String nom;
-	private String prenom;
+	private String lastname;
+	private String firstname;
 	
 	public Test (String nom, String prenom) {
-		this.nom = nom;
-		this.prenom = prenom;
+		this.lastname = nom;
+		this.firstname = prenom;
 	}
 	
 	public Test (int id, String nom, String prenom) {
 		this.id = id;
-		this.nom = nom;
-		this.prenom = prenom;
+		this.lastname = nom;
+		this.firstname = prenom;
 	}
 	
-	public String getNom() {
-		return nom;
+	public String getLastName() {
+		return lastname;
 	}
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setLastName(String nom) {
+		this.lastname = nom;
 	}
-	public String getPrenom() {
-		return prenom;
+	public String getFirstName() {
+		return firstname;
 	}
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
+	public void setFirstName(String prenom) {
+		this.firstname = prenom;
 	}
 
 	public int getId() {
