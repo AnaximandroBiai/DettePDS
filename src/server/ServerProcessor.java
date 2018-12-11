@@ -55,14 +55,14 @@ public class ServerProcessor implements Runnable {
 					if(eCheck == null)
 					{
 						testInsert.create(t1);
-						String reponseServ = "Monsieur " + t1.getFirstName()+ " "+t1.getLastName()+" a bien été ajouté, merci !";
+						String reponseServ = "" + t1.getFirstName()+ " "+t1.getLastName()+" a bien été ajouté, merci !";
 						writer.write(reponseServ);
 						writer.flush();
 
 					}
 					else
 					{
-						String reponseServ = "Impossible d'ajouter la personne, Monsieur "+ t1.getLastName() +" "+t1.getFirstName()+ " est déjà  enregistrée";
+						String reponseServ = "Impossible d'ajouter la personne, "+ t1.getLastName() +" "+t1.getFirstName()+ " est déjà  enregistrée";
 						writer.write(reponseServ);
 						writer.flush();
 					}
