@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 //import java.sql.SQLException;
+import java.sql.Connection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,10 +24,10 @@ public class ServerProcessor implements Runnable {
 	private Socket sock;
 	private PrintWriter writer = null;
 	private BufferedInputStream reader=null;
-	private ConnectionPool connection;
+	private ConnectionPool connectionP;
 
-	public ServerProcessor(Socket s, ConnectionPool connection){
-		this.connection = connection;
+	public ServerProcessor(Socket s, ConnectionPool connectionP){
+		this.connectionP = connectionP;
 		this.sock=s;
 
 	}
@@ -50,7 +51,7 @@ public class ServerProcessor implements Runnable {
 					//the server read the data
 					String request = read();
 					Test t1 = gson.fromJson(request, Test.class);
-					TestDAO testInsert = new TestDAO(connection.getConnection());
+					TestDAO testInsert = new TestDAO(connectionP.getConnection());
 					Test eCheck = testInsert.find(t1.getLastName(),t1.getFirstName());
 					if(eCheck == null)
 					{
@@ -66,8 +67,23 @@ public class ServerProcessor implements Runnable {
 						writer.write(reponseServ);
 						writer.flush();
 					}
-					connection.releaseConnection(connection.getListUsed().get(connection.getListUsed().size()-1));
+					connectionP.releaseConnection(connectionP.getListUsed().get(connectionP.getListUsed().size()-1));
 					break;
+					
+				case "CONNECTION":
+					//Server understands the action asked, he returns "OK"
+					String toConnect = "OK for connect";
+					//the Server waits for the data
+					writer.write(toConnect);
+					writer.flush();
+					Connection con = connectionP.getConnection();
+					String json = gson.toJson(con);
+					System.out.println("Message transmis : "+json);
+					writer.write(json);
+					writer.flush();
+					System.out.println(connectionP.getListDispo().size()+" available connections");
+                    System.out.println(connectionP.getListUsed().size()+" used connections");
+                    break;
 				}
 			}catch (IOException /**| SQLException*/ e){
 				e.printStackTrace();
