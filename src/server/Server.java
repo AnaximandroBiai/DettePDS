@@ -25,6 +25,10 @@ public class Server {
 	        	//server = new ServerSocket(port, 100, bindAddr);
 	        	server = new ServerSocket(port, 100, InetAddress.getLocalHost());
 	            System.out.println("the Server"+InetAddress.getLocalHost()+ "is listening on port" + port);
+	            ConnectionPool con = new ConnectionPool(5);
+	            System.out.println(con.getListDispo().size()+" available connections");
+                System.out.println(con.getListUsed().size()+" used connections");
+	            this.open(con);
 	        } catch (UnknownHostException e){
 	            e.printStackTrace();
 	        } catch (IOException e1){
@@ -34,15 +38,14 @@ public class Server {
 	    /**
 	     * Public method to open the server
 	     */
-	    public void open(){
+	    public void open(ConnectionPool con){
 
 	        Thread t = new Thread(new Runnable() {
 
 	            public void run() {
-	                ConnectionPool con = new ConnectionPool(5);
+	                
 	                while (isRunning){
 	                    try{
-	                    	System.out.println("Socket accepted");
 	                        Socket s1 = server.accept();
 	                        Thread t = new Thread(new server.ServerProcessor(s1, con));
 	                        t.start();

@@ -1,11 +1,9 @@
 package view;
 
-import server.Server;
+import socket.ConnectionSocket;
 
 public class MainView {
 	public static void main(String[] args) {
-		Server s = new Server();
-		s.open();
-		new TestView();
+		new ConnectionSocket();
 	}
 }

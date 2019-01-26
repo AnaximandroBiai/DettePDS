@@ -38,6 +38,10 @@ public class ConnectionPool implements Pool {
     public List<Connection> getListUsed(){
         return this.listUsed;
     }
+    
+    public List<Connection> getListDispo(){
+        return this.listDispo;
+    }
     /**
      * public method which return a connection from the pool only if
      * @return Connection
