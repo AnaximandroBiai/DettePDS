@@ -24,10 +24,11 @@ public class ServerProcessor implements Runnable {
 	private Socket sock;
 	private PrintWriter writer = null;
 	private BufferedInputStream reader=null;
-	private ConnectionPool connectionP;
-
-	public ServerProcessor(Socket s, ConnectionPool connectionP){
-		this.connectionP = connectionP;
+	private ConnectionPool conP;
+	private Connection con;
+	
+	public ServerProcessor(Socket s, ConnectionPool conP){
+		this.conP = conP;
 		this.sock=s;
 
 	}
@@ -35,10 +36,11 @@ public class ServerProcessor implements Runnable {
 	@Override
 	public void run() {
 		//boolean closeConnection = false;
-		while(!sock.isClosed()) {
+		
 			try {
 				writer = new PrintWriter(sock.getOutputStream());
 				reader = new BufferedInputStream(sock.getInputStream());
+				while(!sock.isClosed()) {
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				String demand = read();
 				switch(demand.toUpperCase()){
@@ -51,7 +53,7 @@ public class ServerProcessor implements Runnable {
 					//the server read the data
 					String request = read();
 					Test t1 = gson.fromJson(request, Test.class);
-					TestDAO testInsert = new TestDAO(connectionP.getConnection());
+					TestDAO testInsert = new TestDAO(this.con);
 					Test eCheck = testInsert.find(t1.getLastName(),t1.getFirstName());
 					if(eCheck == null)
 					{
@@ -67,7 +69,6 @@ public class ServerProcessor implements Runnable {
 						writer.write(reponseServ);
 						writer.flush();
 					}
-					connectionP.releaseConnection(connectionP.getListUsed().get(connectionP.getListUsed().size()-1));
 					break;
 					
 				case "CONNECTION":
@@ -76,19 +77,29 @@ public class ServerProcessor implements Runnable {
 					//the Server waits for the data
 					writer.write(toConnect);
 					writer.flush();
-					Connection con = connectionP.getConnection();
-					String json = gson.toJson(con);
-					System.out.println("Message transmis : "+json);
-					writer.write(json);
+					Connection conC = conP.getConnection();
+					//String conGson = gson.toJson(conC);
+					//writer.write(conGson);
 					writer.flush();
-					System.out.println(connectionP.getListDispo().size()+" available connections");
-                    System.out.println(connectionP.getListUsed().size()+" used connections");
+					if(!conC.equals(null)) {
+						this.con = conC;
+						String json = "Connection Done";
+						writer.write(json);
+						writer.flush();
+						System.out.println(conP.getListDispo().size()+" available connections");
+	                    System.out.println(conP.getListUsed().size()+" used connections");
+					}
+					else {
+						String json = "No connection available, try later";
+						writer.write(json);
+						writer.flush();
+					}
                     break;
 				}
+			}
 			}catch (IOException /**| SQLException*/ e){
 				e.printStackTrace();
 			}
-		}
 	}
 	/**
 	 * This methods read the message from the client

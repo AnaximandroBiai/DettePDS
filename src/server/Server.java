@@ -2,7 +2,6 @@ package server;
 
 import connection.ConnectionPool;
 
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -25,10 +24,10 @@ public class Server {
 	        	//server = new ServerSocket(port, 100, bindAddr);
 	        	server = new ServerSocket(port, 100, InetAddress.getLocalHost());
 	            System.out.println("the Server"+InetAddress.getLocalHost()+ "is listening on port" + port);
-	            ConnectionPool con = new ConnectionPool(5);
-	            System.out.println(con.getListDispo().size()+" available connections");
-                System.out.println(con.getListUsed().size()+" used connections");
-	            this.open(con);
+	            ConnectionPool conP = new ConnectionPool(5);
+	            System.out.println(conP.getListDispo().size()+" available connections");
+                System.out.println(conP.getListUsed().size()+" used connections");
+	            this.open(conP);
 	        } catch (UnknownHostException e){
 	            e.printStackTrace();
 	        } catch (IOException e1){
@@ -47,8 +46,9 @@ public class Server {
 	                while (isRunning){
 	                    try{
 	                        Socket s1 = server.accept();
-	                        Thread t = new Thread(new server.ServerProcessor(s1, con));
-	                        t.start();
+	        	            Thread t = new Thread(new server.ServerProcessor(s1, con));
+	    	                t.start();
+	                    	
 	                    }catch(IOException e){
 	                        e.printStackTrace();
 	                    }

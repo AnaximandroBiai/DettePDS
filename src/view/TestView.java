@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.Socket;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,8 +38,10 @@ public class TestView extends JFrame{
 	private boolean displayConnectionScreen = true;
 	private JButton registerButton = new JButton("Register");
 	private JPanel container = new JPanel();
+	private Socket serverTest = null;
 	
-	public TestView() {
+	public TestView(Socket s) {
+		this.serverTest = s;
 		this.setLocationRelativeTo(null);
 		this.setTitle("PhyGit Mall: Test");
 		this.setSize(600, 600);
@@ -111,7 +114,7 @@ public class TestView extends JFrame{
 		});
 		
 		espada.setFont(policeEspada);
-		registerButton.addActionListener(new RegisterButton());
+		registerButton.addActionListener(new RegisterButton(serverTest));
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
 		JPanel east = new JPanel();
@@ -144,14 +147,19 @@ public class TestView extends JFrame{
 	}
 	
 	/**
-	 * Intern class RechrcheButton. When the user clicks on the button the category is sent to server.
+	 * Intern class RegisterButton. When the user clicks on the button the category is sent to server.
 	 *
 	 */
 	private class RegisterButton implements ActionListener {
+		private Socket s;
+		public RegisterButton(Socket s) {
+			this.s = s;
+		}
 		public void actionPerformed(ActionEvent e) {
 			String lName = jtfTestL.getText();
 			String fName = jtfTestF.getText();
-			new TestCreateSocket(lName, fName);
+			//System.out.println("clique");
+			new TestCreateSocket(lName, fName,this.s);
 			}
 		}
 	
