@@ -24,7 +24,7 @@ public class ConnectionSocket extends AbstractSocket {
             System.out.println(reponse);
             String serverReturn = read(b2);
             System.out.println(serverReturn);
-            if(!serverReturn.equals("No connection available, try later")) {
+            if(serverReturn.equals("Connection Done")) {
             	new view.TestView(s);
             }
             //s.close();

@@ -98,7 +98,9 @@ public class ServerProcessor implements Runnable {
 				}
 			}
 			}catch (IOException /**| SQLException*/ e){
-				e.printStackTrace();
+				conP.releaseConnection(con);
+				System.out.println(conP.getListDispo().size()+" available connections");
+                System.out.println(conP.getListUsed().size()+" used connections");
 			}
 	}
 	/**
