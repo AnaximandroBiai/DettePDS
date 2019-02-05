@@ -27,7 +27,7 @@ public class TestCreateSocket extends AbstractSocket{
             PrintWriter w1 = new PrintWriter(s.getOutputStream(), true);
             BufferedInputStream b2 = new BufferedInputStream(s.getInputStream());
             //We inform the server that we want to insert data in database
-            String demand = "TEST";
+            String demand = "TEST\n";
             w1.write(demand);
             w1.flush();
             //we wait for server's response
@@ -46,7 +46,7 @@ public class TestCreateSocket extends AbstractSocket{
             containerResp.add(jlabResp, BorderLayout.CENTER);
             fenResp.setContentPane(containerResp);
             fenResp.setVisible(true);
-            s.close();
+            //s.close();
         }catch(IOException e){ }
     }
 }

@@ -15,7 +15,7 @@ public class ConnectionSocket extends AbstractSocket {
             PrintWriter w1 = new PrintWriter(s.getOutputStream(), true);
             BufferedInputStream b2 = new BufferedInputStream(s.getInputStream());
             //We inform the server that we want to insert data in database
-            String demand = "CONNECTION";
+            String demand = "CONNECTION\n";
             System.out.println(demand);
             w1.write(demand);
             w1.flush();

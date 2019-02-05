@@ -44,7 +44,7 @@ public class ServerProcessor implements Runnable {
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				String demand = read();
 				switch(demand.toUpperCase()){
-				case "TEST":
+				case "TEST\n":
 					//Server understands the action asked, he returns "OK"
 					String toSend = "OK for insert";
 					//the Server waits for the data
@@ -71,7 +71,7 @@ public class ServerProcessor implements Runnable {
 					}
 					break;
 					
-				case "CONNECTION":
+				case "CONNECTION\n":
 					//Server understands the action asked, he returns "OK"
 					String toConnect = "OK for connect";
 					//the Server waits for the data
@@ -98,9 +98,12 @@ public class ServerProcessor implements Runnable {
 				}
 			}
 			}catch (IOException /**| SQLException*/ e){
+				System.out.println("DECONNECTION");
+				if(!conP.getListUsed().isEmpty()) {
 				conP.releaseConnection(con);
 				System.out.println(conP.getListDispo().size()+" available connections");
                 System.out.println(conP.getListUsed().size()+" used connections");
+				}
 			}
 	}
 	/**
