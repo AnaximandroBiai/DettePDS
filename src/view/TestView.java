@@ -26,13 +26,10 @@ import socket.TestCreateSocket;
  */
 public class TestView extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3328699905787266648L;
 	private JLabel rechercheText = new JLabel("Please enter your lastname and your firstname: ");
-	private JLabel espada = new JLabel("PhyGit Mall");
-	private Font policeEspada = new Font("Arial", Font.BOLD, 28);
+	private JLabel dette = new JLabel("PhyGit Mall");
+	private Font policeDette = new Font("Arial", Font.BOLD, 28);
 	public JTextField jtfTestL = new JTextField("lastname");
 	public JTextField jtfTestF = new JTextField("firstname");
 	private boolean displayConnectionScreen = true;
@@ -40,6 +37,10 @@ public class TestView extends JFrame{
 	private JPanel container = new JPanel();
 	private Socket serverTest = null;
 	
+	/**
+	 * this the TestView constructor
+	 * @param Socket s
+	 */
 	public TestView(Socket s) {
 		this.serverTest = s;
 		this.setLocationRelativeTo(null);
@@ -69,7 +70,7 @@ public class TestView extends JFrame{
 			@Override
 			/**
 			 * mouseListener: when the user click on the form, the grey text disappears to
-			 * let him write the category
+			 * let him write the lastName
 			 */
 			public void mouseClicked(MouseEvent e) {
 				JTextField t1 = ((JTextField) e.getSource());
@@ -102,7 +103,7 @@ public class TestView extends JFrame{
 			@Override
 			/**
 			 * mouseListener: when the user click on the form, the grey text disappears to
-			 * let him write the category
+			 * let him write the firstName
 			 */
 			public void mouseClicked(MouseEvent e) {
 				JTextField t2 = ((JTextField) e.getSource());
@@ -113,7 +114,7 @@ public class TestView extends JFrame{
 			}
 		});
 		
-		espada.setFont(policeEspada);
+		dette.setFont(policeDette);
 		registerButton.addActionListener(new RegisterButton(serverTest));
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
@@ -129,7 +130,7 @@ public class TestView extends JFrame{
 		GridLayout layoutTop = new GridLayout(1, 2);
 		top.setLayout(layoutTop);
 		center.setLayout(layoutCenter);
-		top.add(espada);
+		top.add(dette);
 		top.add(rechercheText);
 		container.setLayout(new BorderLayout());
 		center.add(jtfTestL);
@@ -147,7 +148,7 @@ public class TestView extends JFrame{
 	}
 	
 	/**
-	 * Intern class RegisterButton. When the user clicks on the button the category is sent to server.
+	 * Intern class RegisterButton. When the user clicks on the button the lastname and firstname are sent to server.
 	 *
 	 */
 	private class RegisterButton implements ActionListener {
@@ -158,7 +159,6 @@ public class TestView extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			String lName = jtfTestL.getText();
 			String fName = jtfTestF.getText();
-			//System.out.println("clique");
 			new TestCreateSocket(lName, fName,this.s);
 			}
 		}

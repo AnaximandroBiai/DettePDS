@@ -14,9 +14,12 @@ import java.net.UnknownHostException;
  */
 
 public class Server {
-	 private int port =5000;
+	 	private int port =5000;
 	    private ServerSocket server = null;
 	    private boolean isRunning = true;
+	    /**
+	     * this is the Server constructor
+	     */
 	    public Server(){
 	        try{
 	        	//To test in local machine please uncomment the lines below:
@@ -24,7 +27,7 @@ public class Server {
 	        	//server = new ServerSocket(port, 100, bindAddr);
 	        	server = new ServerSocket(port, 100, InetAddress.getLocalHost());
 	            System.out.println("the Server"+InetAddress.getLocalHost()+ "is listening on port" + port);
-	            ConnectionPool conP = new ConnectionPool(5);
+	            ConnectionPool conP = new ConnectionPool(2);
 	            System.out.println(conP.getListDispo().size()+" available connections");
                 System.out.println(conP.getListUsed().size()+" used connections");
 	            this.open(conP);
@@ -36,6 +39,7 @@ public class Server {
 	    }
 	    /**
 	     * Public method to open the server
+	     * @param ConnectionPool con
 	     */
 	    public void open(ConnectionPool con){
 

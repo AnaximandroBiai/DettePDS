@@ -34,16 +34,24 @@ public class ConnectionPool implements Pool {
             }
         }
     }
-
+    
+    /**
+     * public method to get @listUsed attribute
+     * @return List<Connection>
+     */
     public List<Connection> getListUsed(){
         return this.listUsed;
     }
     
+    /**
+     * public method to get @listDispo attribute
+     * @return List<Connection>
+     */
     public List<Connection> getListDispo(){
         return this.listDispo;
     }
     /**
-     * public method which return a connection from the pool only if
+     * public method which return a connection from the pool only if @listDipo contain at least one connection
      * @return Connection
      */
     public Connection getConnection() {
