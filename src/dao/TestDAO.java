@@ -3,6 +3,8 @@ package dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import pojo.Test;
 
@@ -94,6 +96,24 @@ public class TestDAO extends Dao<Test>{
 	public Test find(int id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/**
+	 * public method to find categories in the database
+	 * @return String
+	 */
+	public Collection<String> findCategories() {
+		Collection<String> categories = new ArrayList<String>();
+		  try{
+	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT storeCategory FROM Store");
+	            while(result.next()) {
+	            	categories.add(result.getString("storeCategory"));
+	                return categories;
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return null;
 	}
 
 }
