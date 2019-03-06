@@ -14,34 +14,37 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import pojo.Attendance;
+import pojo.Product;
+import pojo.Stock;
 import pojo.Store;
+import socket.ProductSocket;
 import socket.StoreSocket;
 
 /**
  * @author anax
- * @version 1.0 This is the Attendance view which display the results of the research
+ * @version 1.0 This is the StockReturn view which display the results of the research
  */
-public class AttendanceResultView extends JFrame{
+public class StockReturnResultView extends JFrame{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Font policeDette = new Font("Arial", Font.BOLD, 28);
+private Font policeDette = new Font("Arial", Font.BOLD, 28);
     
     
-    public AttendanceResultView(Socket s, Collection<Attendance> attendances, String cat){
+    public StockReturnResultView(Socket s, Collection<Stock> stocks, String cat){
 
     	StoreSocket sTS = new StoreSocket();
+    	ProductSocket proS = new ProductSocket();
     	
-        this.setTitle("PhyGit Mall: Attendance Indicator");
+        this.setTitle("PhyGit Mall: Client's returns Indicator");
         this.setSize(new Dimension(600,600));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        Collection<Attendance> as = attendances;
+        Collection<Stock> ss = stocks;
         JLabel dette = new JLabel("PhyGit Mall");
-        JLabel resultats = new JLabel("Past month attendance for the stores of the category :"+cat);
+        JLabel resultats = new JLabel("Past month client's returns for the stores of the category :"+cat);
         
         
         JPanel top = new JPanel();
@@ -71,11 +74,13 @@ public class AttendanceResultView extends JFrame{
         top.add(dette);
         top.add(resultats);
 
-   for(Attendance a : as) {
+   for(Stock st : ss) {
         	
-        Store sT = sTS.getStore(s, a.getStoreId());
+        Store sT = sTS.getStore(s, st.getStoreId());
+        Product p = proS.getProduct(s, st.getProductId());
         
-        JLabel result = new JLabel("Store: "+sT.getStoreName()+"  |  Turnover: "+String.valueOf(a.getAttendanceLevel()));
+        
+        JLabel result = new JLabel("Store :" +sT.getStoreName()+ " |  Product returned :" + p.getProductReference() + " |  Quantity returned: " + st.getQuantity());
         center.add(result);
         }
 

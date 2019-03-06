@@ -63,7 +63,7 @@ public class ProductDAO extends Dao<Product> {
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT productId, productReference, price, keyword FROM Product Where productIdt=" + id);
+							"SELECT productId, productReference, price, keyword FROM Product Where productId=" + id);
 			while (result.next()) {
 				Product product = new Product(result.getInt("productId"), result.getString("productReference"),
 						result.getInt("price"), result.getInt("keyWord"));

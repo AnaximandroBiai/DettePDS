@@ -31,7 +31,7 @@ public class MainMenuView extends JFrame{
 	private Font policeDette = new Font("Arial", Font.BOLD, 28);
 	private boolean displayConnectionScreen = true;
 	private JButton turnoverButton = new JButton("Turnover");
-//	private JButton stockButton = new JButton("Returns");
+	private JButton stockRButton = new JButton("Returns");
 	private JButton attendanceButton = new JButton("Attendance");
 //	private JButton occButton = new JButton("Occupation");
 	private JPanel container = new JPanel();
@@ -45,7 +45,7 @@ public class MainMenuView extends JFrame{
 
 		dette.setFont(policeDette);
 		turnoverButton.addActionListener(new TurnoverButton(s, cats));
-//		stockButton.addActionListener(new ReturnButton());
+		stockRButton.addActionListener(new ReturnButton(s, cats));
 		attendanceButton.addActionListener(new AttendanceButton(s, cats));
 //		occButton.addActionListener(new OccupationButton());
 		JPanel top = new JPanel();
@@ -66,7 +66,7 @@ public class MainMenuView extends JFrame{
 		top.add(rechercheText);
 		container.setLayout(new BorderLayout());	
 		east.add(turnoverButton);
-//		east.add(stockButton);
+		east.add(stockRButton);
 		west.add(attendanceButton);
 		//west.add(occButton);
 		container.add(top, BorderLayout.NORTH);
@@ -110,6 +110,23 @@ public class MainMenuView extends JFrame{
 		}
 		public void actionPerformed(ActionEvent e) {
 			 new AttendanceView(s, cats);
+		}
+
+	}
+	
+	/**
+	 * Intern class AttendanceButton. When the user clicks on the button the category is sent to server.
+	 *
+	 */
+	private class ReturnButton implements ActionListener {
+		private Socket s;
+		private Collection<String> cats;
+		public ReturnButton(Socket s, Collection<String> cats) {
+			this.s = s;
+			this.cats = cats;
+		}
+		public void actionPerformed(ActionEvent e) {
+			 new StockReturnView(s, cats);
 		}
 
 	}

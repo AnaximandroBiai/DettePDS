@@ -11,6 +11,7 @@ import java.util.Collection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+
 import connection.ConnectionPool;
 import dao.*;
 import pojo.*;
@@ -159,7 +160,7 @@ public class ServerProcessor implements Runnable {
 					break;
 				case "FINDATTENDANCE\n":
 					//Server understands the action asked, he returns "OK"
-					String toSendA = "OK for find";
+					String toSendA = "OK for find\n";
 					//the Server waits for the data
 					writer.write(toSendA);
 					writer.flush();
@@ -181,6 +182,54 @@ public class ServerProcessor implements Runnable {
 
 					}
 					break;
+				case "FINDRETURNS\n":
+					//Server understands the action asked, he returns "OK"
+					String toSendR = "OK for find\n";
+					//the Server waits for the data
+					writer.write(toSendR);
+					writer.flush();
+					//the server read the data
+					String toFindR = read();
+					System.out.println("Donnée reçue sur le server: "+toFindR);
+					StockDAO rDaoFind = new StockDAO(con);
+					Collection<Stock> rFind = rDaoFind.find(toFindR);
+					String jsonFindR = gson.toJson(rFind);
+					//the server looks and find (or not) the data asked and return his answer to the client
+					if(jsonFindR == null){
+						String failFind = "";
+						writer.write(failFind);
+						writer.flush();
+
+					}else {
+						writer.write(jsonFindR);
+						writer.flush();
+
+					}
+					break;
+					
+				case "FINDPRODUCT\n":
+					//Server understands the action asked, he returns "OK"
+					String toSendP = "OK for find\n";
+					//the Server waits for the data
+					writer.write(toSendP);
+					writer.flush();
+					//the server read the data
+					String toFindP = read();
+					System.out.println("Donnée reçue sur le server: "+toFindP);
+					ProductDAO pDaoFind = new ProductDAO(con);
+					Product pFind = pDaoFind.find(Integer.valueOf(toFindP));
+					String jsonFindP = gson.toJson(pFind);
+					//the server looks and find (or not) the data asked and return his answer to the client
+					if(jsonFindP == null){
+						String failFind = "";
+						writer.write(failFind);
+						writer.flush();
+					}else {
+						writer.write(jsonFindP);
+						writer.flush();
+					}
+					break;
+
 				}
 			}
 		}
