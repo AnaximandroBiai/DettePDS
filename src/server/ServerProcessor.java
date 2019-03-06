@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 //import java.sql.SQLException;
 import java.sql.Connection;
+import java.util.Collection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,11 +26,14 @@ public class ServerProcessor implements Runnable {
 	private ConnectionPool conP;
 	private Connection con;
 
-	 /**
-     * this is the ServerProcessor constructor
-     * @param Socket s
-     * @param ConnectionPool conP
-     */
+	/**
+	 * this is the ServerProcessor constructor
+	 * 
+	 * @param Socket
+	 *            s
+	 * @param ConnectionPool
+	 *            conP
+	 */
 	public ServerProcessor(Socket s, ConnectionPool conP) {
 		this.conP = conP;
 		this.sock = s;
@@ -37,9 +41,9 @@ public class ServerProcessor implements Runnable {
 	}
 
 	@Override
-	 /**
-     * Public method to run the ServerProcessor thread
-     */
+	/**
+	 * Public method to run the ServerProcessor thread
+	 */
 	public void run() {
 		try {
 			writer = new PrintWriter(sock.getOutputStream());
@@ -93,14 +97,94 @@ public class ServerProcessor implements Runnable {
 						String json = "Connection Done\n";
 						writer.write(json);
 						writer.flush();
+						TestDAO categories = new TestDAO(this.con);
+						Collection<String> cats = categories.findCategories();
+						String jsonC = gson.toJson(cats);
+						writer.write(jsonC);
+						writer.flush();
 						System.out.println(conP.getListDispo().size() + " available connections");
 						System.out.println(conP.getListUsed().size() + " used connections");
 					}
 					break;
+				case "FINDTURNOVERS\n":
+					// Server understands the action asked, he returns "OK"
+					String toSendT = "OK for find\n";
+					// the Server waits for the data
+					writer.write(toSendT);
+					writer.flush();
+					// the server read the data
+					String toFindT = read();
+					System.out.println("Donnée reçue sur le server: " + toFindT);
+					TurnoverDAO tDaoFind = new TurnoverDAO(con);
+					Collection<Turnover> tFind = tDaoFind.find(toFindT);
+					String jsonFindT = gson.toJson(tFind);
+					// the server looks and find (or not) the data asked and return his answer to
+					// the client
+					if (jsonFindT == null) {
+						String failFind = "";
+						writer.write(failFind);
+						writer.flush();
+
+					} else {
+						writer.write(jsonFindT);
+						writer.flush();
+
+					}
+					break;
+				case "FINDSTORE\n":
+					// Server understands the action asked, he returns "OK"
+					String toSendS = "OK for find\n";
+					// the Server waits for the data
+					writer.write(toSendS);
+					writer.flush();
+					// the server read the data
+					String toFindS = read();
+					int sTId = Integer.valueOf(toFindS);
+					System.out.println("Donnée reçue sur le server: " + sTId);
+					StoreDAO sDaoFind = new StoreDAO(con);
+					Store sFind = sDaoFind.find(sTId);
+					String jsonFindS = gson.toJson(sFind);
+					// the server looks and find (or not) the data asked and return his answer to
+					// the client
+					if (jsonFindS == null) {
+						String failFind = "";
+						writer.write(failFind);
+						writer.flush();
+
+					} else {
+						writer.write(jsonFindS);
+						writer.flush();
+
+					}
+					break;
+				case "FINDATTENDANCE\n":
+					//Server understands the action asked, he returns "OK"
+					String toSendA = "OK for find";
+					//the Server waits for the data
+					writer.write(toSendA);
+					writer.flush();
+					//the server read the data
+					String toFindA = read();
+					System.out.println("Donnée reçue sur le server: "+toFindA);
+					AttendanceDAO aDaoFind = new AttendanceDAO(con);
+					Collection<Attendance> aFind = aDaoFind.find(toFindA);
+					String jsonFindF = gson.toJson(aFind);
+					//the server looks and find (or not) the data asked and return his answer to the client
+					if(jsonFindF == null){
+						String failFind = "";
+						writer.write(failFind);
+						writer.flush();
+
+					}else {
+						writer.write(jsonFindF);
+						writer.flush();
+
+					}
+					break;
 				}
 			}
-		} 
-		//if a client is closed
+		}
+		// if a client is closed
 		catch (IOException /** | SQLException */
 		e) {
 			System.out.println("DECONNECTION");

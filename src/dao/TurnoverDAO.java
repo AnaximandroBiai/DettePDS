@@ -74,7 +74,7 @@ public class TurnoverDAO extends Dao<Turnover> {
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
 							"SELECT T.turnoverDate, T.storeId, T.amount FROM Turnover as T, Store as S Where S.storeCategory='"
 									+ type
-									+ "'and S.storeId = T.storeId and (month(now()) - month(T.turnoverDate)) = 1 ");
+									+ "'and S.storeId = T.storeId and (month(now()) - month(T.turnoverDate)) = 1");
 			while (result.next()) {
 				Turnover turnO = new Turnover(result.getString("turnoverDate"), result.getInt("storeId"),
 						result.getInt("amount"));

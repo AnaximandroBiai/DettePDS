@@ -107,9 +107,10 @@ public class TestDAO extends Dao<Test>{
 		  try{
 	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT storeCategory FROM Store");
 	            while(result.next()) {
-	            	categories.add(result.getString("storeCategory"));
-	                return categories;
+	            	String cat = result.getString("storeCategory");
+	            	categories.add(cat);
 	            }
+	            return categories;
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
