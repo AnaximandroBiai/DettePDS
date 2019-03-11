@@ -11,7 +11,6 @@ import java.util.Collection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-
 import connection.ConnectionPool;
 import dao.*;
 import pojo.*;
@@ -229,9 +228,56 @@ public class ServerProcessor implements Runnable {
 						writer.flush();
 					}
 					break;
+					
+				case "FINDOCCUPATION\n":
+					//Server understands the action asked, he returns "OK"
+					String toSendO = "OK for find";
+					//the Server waits for the data
+					writer.write(toSendO);
+					writer.flush();
+					//the server read the data
+					System.out.println("Count in progress: ");
+					OccupationDAO oDaoFind = new OccupationDAO(con);
+					Collection<Integer> oFind = oDaoFind.findOccupation();
+					String jsonFindO = gson.toJson(oFind);
+					//the server looks and find (or not) the data asked and return his answer to the client
+					if(jsonFindO == null){
+						String failFind = "";
+						writer.write(failFind);
+						writer.flush();
 
+					}else {
+						writer.write(jsonFindO);
+						writer.flush();
+
+					}
+					break;
+					
+				case "FINDLOCATIONNB\n":
+					//Server understands the action asked, he returns "OK"
+					String toSendE = "OK for count";
+					//the Server waits for the data
+					writer.write(toSendE);
+					writer.flush();
+					//the server read the data
+					System.out.println("Count in progress: ");
+					LocationDAO lDaoFind = new LocationDAO(con);
+					int nbLFind = lDaoFind.locationNb();
+					String jsonFindL = gson.toJson(nbLFind);
+					//the server looks and find (or not) the data asked and return his answer to the client
+					if(jsonFindL == null){
+						String failFind = "";
+						writer.write(failFind);
+						writer.flush();
+
+					}else {
+						writer.write(jsonFindL);
+						writer.flush();
+
+					}
+					break;
+				}			
 				}
-			}
 		}
 		// if a client is closed
 		catch (IOException /** | SQLException */

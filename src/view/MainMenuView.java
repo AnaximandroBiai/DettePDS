@@ -14,13 +14,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
+import socket.OccupationSocket;
 
 /**
  * @author anax
  * @version 1.0 This is the main menu view
  */
-public class MainMenuView extends JFrame{
+public class MainMenuView extends JFrame {
 
 	/**
 	 * 
@@ -33,7 +33,7 @@ public class MainMenuView extends JFrame{
 	private JButton turnoverButton = new JButton("Turnover");
 	private JButton stockRButton = new JButton("Returns");
 	private JButton attendanceButton = new JButton("Attendance");
-//	private JButton occButton = new JButton("Occupation");
+	private JButton occupationButton = new JButton("Occupation");
 	private JPanel container = new JPanel();
 
 	public MainMenuView(Socket s, Collection<String> cats) {
@@ -42,12 +42,11 @@ public class MainMenuView extends JFrame{
 		this.setSize(600, 600);
 		this.setResizable(false);
 
-
 		dette.setFont(policeDette);
 		turnoverButton.addActionListener(new TurnoverButton(s, cats));
 		stockRButton.addActionListener(new ReturnButton(s, cats));
 		attendanceButton.addActionListener(new AttendanceButton(s, cats));
-//		occButton.addActionListener(new OccupationButton());
+		occupationButton.addActionListener(new OccupationButton(s));
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
 		JPanel east = new JPanel();
@@ -64,11 +63,11 @@ public class MainMenuView extends JFrame{
 		center.setLayout(layoutCenter);
 		top.add(dette);
 		top.add(rechercheText);
-		container.setLayout(new BorderLayout());	
+		container.setLayout(new BorderLayout());
 		east.add(turnoverButton);
 		east.add(stockRButton);
 		west.add(attendanceButton);
-		//west.add(occButton);
+		west.add(occupationButton);
 		container.add(top, BorderLayout.NORTH);
 		container.add(center, BorderLayout.CENTER);
 		container.add(bot, BorderLayout.SOUTH);
@@ -79,55 +78,90 @@ public class MainMenuView extends JFrame{
 		this.setContentPane(container);
 		this.setVisible(displayConnectionScreen);
 	}
-	
+
 	/**
-	 * Intern class TurnoverButton. When the user clicks on the button the category is sent to server.
+	 * Intern class TurnoverButton. When the user clicks on the button the category
+	 * is sent to server.
 	 *
 	 */
 	private class TurnoverButton implements ActionListener {
 		private Socket s;
 		private Collection<String> cats;
+
 		public TurnoverButton(Socket s, Collection<String> cats) {
 			this.s = s;
 			this.cats = cats;
 		}
+
 		public void actionPerformed(ActionEvent e) {
-			 new TurnoverView(s, cats);
+			new TurnoverView(s, cats);
 		}
-		
+
 	}
-	
+
 	/**
-	 * Intern class AttendanceButton. When the user clicks on the button the category is sent to server.
+	 * Intern class AttendanceButton. When the user clicks on the button the
+	 * category is sent to server.
 	 *
 	 */
 	private class AttendanceButton implements ActionListener {
 		private Socket s;
 		private Collection<String> cats;
+
 		public AttendanceButton(Socket s, Collection<String> cats) {
 			this.s = s;
 			this.cats = cats;
 		}
+
 		public void actionPerformed(ActionEvent e) {
-			 new AttendanceView(s, cats);
+			new AttendanceView(s, cats);
 		}
 
 	}
-	
+
 	/**
-	 * Intern class AttendanceButton. When the user clicks on the button the category is sent to server.
+	 * Intern class ReturnButton. When the user clicks on the button the category is
+	 * sent to server.
 	 *
 	 */
 	private class ReturnButton implements ActionListener {
 		private Socket s;
 		private Collection<String> cats;
+
 		public ReturnButton(Socket s, Collection<String> cats) {
 			this.s = s;
 			this.cats = cats;
 		}
+
 		public void actionPerformed(ActionEvent e) {
-			 new StockReturnView(s, cats);
+			new StockReturnView(s, cats);
 		}
 
+	}
+
+	private class OccupationButton implements ActionListener {
+		private Socket s;
+
+		public OccupationButton(Socket s) {
+			this.s = s;
+		}
+		public void actionPerformed(ActionEvent e) {
+			OccupationSocket oS = new OccupationSocket();
+			Collection<Integer> oNB = oS.getOccupation(s);
+			if (oNB == null) {
+				JFrame fenResp = new JFrame();
+				JPanel containerResp = new JPanel();
+				fenResp.setSize(150, 150);
+				fenResp.setLocationRelativeTo(null);
+				JLabel jlabResp = new JLabel("No datas");
+				containerResp.add(jlabResp, BorderLayout.CENTER);
+				fenResp.setContentPane(containerResp);
+				fenResp.setVisible(true);
+			} else {
+
+				new OccupationResultView(this.s, oNB);
+
+			}
+		}
 	}
 }

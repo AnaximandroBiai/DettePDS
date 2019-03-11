@@ -86,12 +86,12 @@ public class OccupationDAO extends Dao<Occupation> {
 
 	}
 
-	public Collection<Integer> findOccupation() throws SQLException {
+	public Collection<Integer> findOccupation() {
 		Collection<Integer> Occupations = new ArrayList<Integer>();
 		try {
 			ResultSet compteur = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT DISTINCT COUNT(arrivalDate) as count FROM Occupation");
+					.executeQuery("SELECT COUNT(DISTINCT year(arrivalDate)) as count FROM Occupation");
 			int cpt = compteur.getInt("count");
 			for (int i = 1; i < cpt; i++) {
 				ResultSet result = this.connect
