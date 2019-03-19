@@ -22,7 +22,7 @@ import pojo.Stock;
  */
 public class StockRSocket extends AbstractSocket{
 
-	public Collection<Stock> getReturns(Socket s, String cat) {
+	public Collection<Stock> getReturns(Socket s, String type) {
 		try {
 			GsonBuilder builder = new GsonBuilder();
 			Gson gson = builder.create();
@@ -36,7 +36,7 @@ public class StockRSocket extends AbstractSocket{
 			String reponse = read(b2);
 			System.out.println(reponse);
 			// Now we send to server the JSON file, with the data to insert
-			w1.write(cat);
+			w1.write(type);
 			w1.flush();
 			// we read the response from the server
 			String retourServer = read(b2);

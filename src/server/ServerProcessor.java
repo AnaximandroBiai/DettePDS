@@ -102,6 +102,10 @@ public class ServerProcessor implements Runnable {
 						String jsonC = gson.toJson(cats);
 						writer.write(jsonC);
 						writer.flush();
+						Collection<String> types = categories.findTypes();
+						String jsonT = gson.toJson(types);
+						writer.write(jsonT);
+						writer.flush();
 						System.out.println(conP.getListDispo().size() + " available connections");
 						System.out.println(conP.getListUsed().size() + " used connections");
 					}

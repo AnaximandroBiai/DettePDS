@@ -36,7 +36,7 @@ public class MainMenuView extends JFrame {
 	private JButton occupationButton = new JButton("Occupation");
 	private JPanel container = new JPanel();
 
-	public MainMenuView(Socket s, Collection<String> cats) {
+	public MainMenuView(Socket s, Collection<String> cats, Collection<String> types) {
 		this.setLocationRelativeTo(null);
 		this.setTitle("PhyGit Mall: Mall activity indicators");
 		this.setSize(600, 600);
@@ -44,7 +44,7 @@ public class MainMenuView extends JFrame {
 
 		dette.setFont(policeDette);
 		turnoverButton.addActionListener(new TurnoverButton(s, cats));
-		stockRButton.addActionListener(new ReturnButton(s, cats));
+		stockRButton.addActionListener(new ReturnButton(s, types));
 		attendanceButton.addActionListener(new AttendanceButton(s, cats));
 		occupationButton.addActionListener(new OccupationButton(s));
 		JPanel top = new JPanel();
@@ -67,7 +67,7 @@ public class MainMenuView extends JFrame {
 		east.add(turnoverButton);
 		east.add(stockRButton);
 		west.add(attendanceButton);
-		west.add(occupationButton);
+//		west.add(occupationButton);
 		container.add(top, BorderLayout.NORTH);
 		container.add(center, BorderLayout.CENTER);
 		container.add(bot, BorderLayout.SOUTH);
@@ -128,9 +128,9 @@ public class MainMenuView extends JFrame {
 		private Socket s;
 		private Collection<String> cats;
 
-		public ReturnButton(Socket s, Collection<String> cats) {
+		public ReturnButton(Socket s, Collection<String> types) {
 			this.s = s;
-			this.cats = cats;
+			this.cats = types;
 		}
 
 		public void actionPerformed(ActionEvent e) {

@@ -42,7 +42,9 @@ public class ConnectionSocket extends AbstractSocket {
             	Type getCats = new TypeToken<ArrayList<String>>(){}.getType();
             	String jCats = read(b2);
             	Collection<String> cats = gson.fromJson(jCats, getCats);
-            	new view.MainMenuView(s, cats);
+            	String jTypes = read(b2);
+            	Collection<String> types = gson.fromJson(jTypes, getCats);
+            	new view.MainMenuView(s, cats, types);
             }
             //connection unavailable
             else {

@@ -31,22 +31,22 @@ public class StockReturnView extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel researchText = new JLabel("Please choose the category client returns you want to see: ");
+	private JLabel researchText = new JLabel("Please choose the type of client returns you want to see: ");
 	private JLabel dette = new JLabel("PhyGit Mall");
 	private Font policeDette = new Font("Arial", Font.BOLD, 28);
-	public JComboBox<String> jtfCats = new JComboBox<String>();
+	public JComboBox<String> jtfTypes = new JComboBox<String>();
 	private boolean displayConnectionScreen = true;
 	private JButton researchButton = new JButton("Research");
 	private JPanel container = new JPanel();
 	
-	public StockReturnView(Socket s, Collection<String> cats) {
+	public StockReturnView(Socket s, Collection<String> types) {
 		this.setLocationRelativeTo(null);
 		this.setTitle("PhyGit Mall: Mall activity indicators");
-		this.setSize(600, 600);
+		this.setSize(700, 700);
 		this.setResizable(false);
 
-		for (String cat : cats) {
-		jtfCats.addItem(cat);
+		for (String type: types){
+		jtfTypes.addItem(type);
 		}
 		dette.setFont(policeDette);
 		researchButton.addActionListener(new ResearchButton(s));
@@ -67,7 +67,7 @@ public class StockReturnView extends JFrame{
 		top.add(dette);
 		top.add(researchText);
 		container.setLayout(new BorderLayout());
-		center.add(jtfCats);
+		center.add(jtfTypes);
 		bot.add(researchButton);
 		container.add(top, BorderLayout.NORTH);
 		container.add(center, BorderLayout.CENTER);
@@ -91,9 +91,9 @@ public class StockReturnView extends JFrame{
 			this.s = s;
 		}
 		public void actionPerformed(ActionEvent e) {
-			String cat = (String) jtfCats.getSelectedItem();
+			String type = (String) jtfTypes.getSelectedItem();
 			StockRSocket sRS = new StockRSocket();
-			Collection<Stock> sR = sRS.getReturns(s, cat);
+			Collection<Stock> sR = sRS.getReturns(s, type);
 			if (sR == null) {
 				JFrame fenResp = new JFrame();
 				JPanel containerResp = new JPanel();
@@ -105,7 +105,7 @@ public class StockReturnView extends JFrame{
 				fenResp.setVisible(true);
 			} else {
 				
-				new StockReturnResultView(this.s, sR, cat);
+				new StockReturnResultView(this.s, sR, type);
 				
 				}
 			}

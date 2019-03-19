@@ -67,7 +67,7 @@ public class StockDAO extends Dao<Stock>{
 	public Collection<Stock> find(String type) {
 		Collection <Stock> Stocks = new ArrayList<Stock>();
 		try{
-            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM Stock as S, Store as St Where St.storeCategory='"+ type +"'and St.storeId = S.storeId and arrivalReason = 'retourclient' and (month(now()) - month(S.arrivalDate)) = 1");
+            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM Stock as S, KeyWord as K, Product as P Where K.nameKeyWord='"+ type +"'and K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and (month(now()) - month(S.arrivalDate)) = 1");
             while(result.next()){
                 Stock stock = new Stock(result.getInt("storeId"),result.getInt("productId"), result.getInt("Quantity"), result.getString("arrivalDate"), null, result.getString("arrivalReason"));
                 Stocks.add(stock);        

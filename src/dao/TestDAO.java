@@ -117,4 +117,22 @@ public class TestDAO extends Dao<Test>{
 	        return null;
 	}
 
+	/**
+	 * public method to find categories in the database
+	 * @return String
+	 */
+	public Collection<String> findTypes() {
+		Collection<String> types = new ArrayList<String>();
+		  try{
+	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT nameKeyWord FROM KeyWord");
+	            while(result.next()) {
+	            	String type = result.getString("nameKeyWord");
+	            	types.add(type);
+	            }
+	            return types;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return null;
+	}
 }
