@@ -100,10 +100,12 @@ public class ServerProcessor implements Runnable {
 						TestDAO categories = new TestDAO(this.con);
 						Collection<String> cats = categories.findCategories();
 						String jsonC = gson.toJson(cats);
+						System.out.println(jsonC);
 						writer.write(jsonC);
 						writer.flush();
 						Collection<String> types = categories.findTypes();
 						String jsonT = gson.toJson(types);
+						System.out.println(jsonT);
 						writer.write(jsonT);
 						writer.flush();
 						System.out.println(conP.getListDispo().size() + " available connections");
@@ -301,6 +303,7 @@ public class ServerProcessor implements Runnable {
 	 * @return String
 	 * @throws IOException
 	 */
+
 	private String read() throws IOException {
 		String response = "";
 		int stream;
