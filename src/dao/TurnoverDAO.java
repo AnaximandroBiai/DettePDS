@@ -86,4 +86,35 @@ public class TurnoverDAO extends Dao<Turnover> {
 		}
 		return null;
 	}
+	
+	public Collection<Turnover> find2(String type) {
+		Collection<Turnover> Turnovers = new ArrayList<Turnover>();
+		try {
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
+							"SELECT DISTINCT P.storeId, FROM PurchaseHistory as P , Store as S Where S.storeCategory='"
+									+ type
+									+ "'and S.storeId = P.storeId");
+			while (result.next()) {
+				Turnover turnO = new Turnover(result.getString("purchaseDate"), result.getInt("storeId"),0);
+				Turnovers.add(turnO);
+			}
+			for(Turnover t : Turnovers) {
+				int turn = 0;
+				ResultSet result2 = this.connect
+						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
+								"SELECT Pr.price, P.quantity, FROM PurchaseHistory as P, Product as Pr Where P.storeId='"
+										+ t.getStoreId()
+										+ "'and Pr.productId = P.productId and (year(now()) - year(P.purchaseDate)) = 1");
+				while (result2.next()) {
+					turn += (result2.getInt("price") * result2.getInt("quantity"));
+				}
+				t.setAmount(turn);
+			}
+			return Turnovers;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
