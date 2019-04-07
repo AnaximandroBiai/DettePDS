@@ -6,7 +6,6 @@ package pojo;
  * This is the attendance data model
  */
 public class Attendance {
-	private String attendanceDate;
 	private int storeId;
 	private int attendanceLevel;
 	
@@ -16,27 +15,10 @@ public class Attendance {
      * @param int storeId
      * @param int attendanceLevel
      */
-	public Attendance(String attendanceDate, int storeId, int attendanceLevel) {
+	public Attendance(int storeId, int attendanceLevel) {
 		super();
-		this.attendanceDate = attendanceDate;
 		this.storeId = storeId;
 		this.attendanceLevel = attendanceLevel;
-	}
-
-	/**
-     * public method to get @attendanceDate attribute
-     * @return String
-     */
-	public String getAttendanceDate() {
-		return attendanceDate;
-	}
-
-	/**
-     * public method to set a value to @attendanceDate attribute
-     * @param String attendanceDate
-     */
-	public void setAttendanceDate(String attendanceDate) {
-		this.attendanceDate = attendanceDate;
 	}
 
 	/**

@@ -60,6 +60,8 @@ public class TurnoverDAO extends Dao<Turnover> {
 		return null;
 	}
 
+	
+	//Old method
 	/**
 	 * this method allows to find a turnover list in the database with the sector of
 	 * store
@@ -67,43 +69,43 @@ public class TurnoverDAO extends Dao<Turnover> {
 	 * @param type
 	 * @return Collection
 	 */
+//	public Collection<Turnover> find(String type) {
+//		Collection<Turnover> Turnovers = new ArrayList<Turnover>();
+//		try {
+//			ResultSet result = this.connect
+//					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
+//							"SELECT T.turnoverDate, T.storeId, T.amount FROM Turnover as T, Store as S Where S.storeCategory='"
+//									+ type
+//									+ "'and S.storeId = T.storeId and (month(now()) - month(T.turnoverDate)) = 1");
+//			while (result.next()) {
+//				Turnover turnO = new Turnover(result.getInt("storeId"),
+//						result.getInt("amount"));
+//				Turnovers.add(turnO);
+//			}
+//			return Turnovers;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
+	
 	public Collection<Turnover> find(String type) {
 		Collection<Turnover> Turnovers = new ArrayList<Turnover>();
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT T.turnoverDate, T.storeId, T.amount FROM Turnover as T, Store as S Where S.storeCategory='"
-									+ type
-									+ "'and S.storeId = T.storeId and (month(now()) - month(T.turnoverDate)) = 1");
-			while (result.next()) {
-				Turnover turnO = new Turnover(result.getString("turnoverDate"), result.getInt("storeId"),
-						result.getInt("amount"));
-				Turnovers.add(turnO);
-			}
-			return Turnovers;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public Collection<Turnover> find2(String type) {
-		Collection<Turnover> Turnovers = new ArrayList<Turnover>();
-		try {
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT DISTINCT P.storeId, FROM PurchaseHistory as P , Store as S Where S.storeCategory='"
+							"SELECT DISTINCT P.storeId FROM PurchaseHistory as P, Store as S Where S.storeCategory='"
 									+ type
 									+ "'and S.storeId = P.storeId");
 			while (result.next()) {
-				Turnover turnO = new Turnover(result.getString("purchaseDate"), result.getInt("storeId"),0);
+				Turnover turnO = new Turnover(result.getInt("storeId"),0);
 				Turnovers.add(turnO);
 			}
 			for(Turnover t : Turnovers) {
 				int turn = 0;
 				ResultSet result2 = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-								"SELECT Pr.price, P.quantity, FROM PurchaseHistory as P, Product as Pr Where P.storeId='"
+								"SELECT Pr.price, P.quantity FROM PurchaseHistory as P, Product as Pr Where P.storeId='"
 										+ t.getStoreId()
 										+ "'and Pr.productId = P.productId and (year(now()) - year(P.purchaseDate)) = 1");
 				while (result2.next()) {

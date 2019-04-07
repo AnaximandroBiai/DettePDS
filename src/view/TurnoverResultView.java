@@ -40,7 +40,7 @@ public class TurnoverResultView extends JFrame {
 		this.setResizable(false);
 		Collection<Turnover> ts = turnovers;
 		JLabel dette = new JLabel("PhyGit Mall");
-		JLabel resultats = new JLabel("Past month turnover for the stores of the category :" + cat);
+		JLabel resultats = new JLabel("Past year turnover for the stores of the category :" + cat);
 
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();

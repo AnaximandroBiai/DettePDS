@@ -6,7 +6,6 @@ package pojo;
  * This is the turnover data model
  */
 public class Turnover {
-	private String turnoverDate;
 	private int storeId;
 	private int amount;
 	
@@ -14,32 +13,15 @@ public class Turnover {
 	
 	/**
      * this is the turnover constructor
-     * @param String turnoverDate
      * @param int storeId
      * @param int amount
      */
-	public Turnover(String turnoverDate, int storeId, int amount) {
+	public Turnover(int storeId, int amount) {
 		super();
-		this.turnoverDate = turnoverDate;
 		this.storeId = storeId;
 		this.amount = amount;
 	}
 
-	/**
-     * public method to get @turnoverDate attribute
-     * @return String
-     */
-	public String getTurnoverDate() {
-		return turnoverDate;
-	}
-	
-	/**
-     * public method to set a value to @turnoverDate attribute
-     * @param String turnoverDate
-     */
-	public void setTurnoverDate(String turnoverDate) {
-		this.turnoverDate = turnoverDate;
-	}
 
 	/**
      * public method to get @storeId attribute
