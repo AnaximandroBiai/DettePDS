@@ -44,6 +44,7 @@ public class TurnoverView extends JFrame{
 		this.setSize(700, 700);
 		this.setResizable(false);
 
+		jtfCats.addItem("All");
 		for (String cat : cats) {
 		jtfCats.addItem(cat);
 		}

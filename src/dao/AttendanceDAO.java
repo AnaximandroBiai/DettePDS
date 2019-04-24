@@ -60,7 +60,7 @@ public class AttendanceDAO extends Dao<Attendance> {
 		return null;
 	}
 
-	//Old method
+	// Old method
 	/**
 	 * this method allows to find a attendance list in the database with the sector
 	 * of store
@@ -68,45 +68,52 @@ public class AttendanceDAO extends Dao<Attendance> {
 	 * @param type
 	 * @return Collection
 	 */
-//	public Collection<Attendance> find(String type) {
-//		Collection<Attendance> attendances = new ArrayList<Attendance>();
-//		try {
-//			ResultSet result = this.connect
-//					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-//							"SELECT A.attendanceDate, A.storeId, A.attendanceLevel FROM Attendance as A, Store as S Where S.storeCategory='"
-//									+ type
-//									+ "'and S.storeId = A.storeId and (month(now()) - month(A.attendanceDate)) = 1 ");
-//			while (result.next()) {
-//				Attendance att = new Attendance(result.getInt("storeId"),
-//						result.getInt("attendanceLevel"));
-//				attendances.add(att);
-//			}
-//			return attendances;
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
-	
+	// public Collection<Attendance> find(String type) {
+	// Collection<Attendance> attendances = new ArrayList<Attendance>();
+	// try {
+	// ResultSet result = this.connect
+	// .createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+	// ResultSet.CONCUR_READ_ONLY).executeQuery(
+	// "SELECT A.attendanceDate, A.storeId, A.attendanceLevel FROM Attendance as A,
+	// Store as S Where S.storeCategory='"
+	// + type
+	// + "'and S.storeId = A.storeId and (month(now()) - month(A.attendanceDate)) =
+	// 1 ");
+	// while (result.next()) {
+	// Attendance att = new Attendance(result.getInt("storeId"),
+	// result.getInt("attendanceLevel"));
+	// attendances.add(att);
+	// }
+	// return attendances;
+	// } catch (SQLException e) {
+	// e.printStackTrace();
+	// }
+	// return null;
+	// }
+
 	public Collection<Attendance> find(String type) {
 		Collection<Attendance> Attendances = new ArrayList<Attendance>();
+		ResultSet result = null;
 		try {
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT DISTINCT l.storeId FROM LandMark as l, Store as S Where S.storeCategory='"
-									+ type
-									+ "'and S.storeId = l.storeId");
+			if (type.equals("All")) {
+				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+						.executeQuery(
+								"SELECT DISTINCT l.storeId FROM LandMark as l, Store as S Where S.storeId = l.storeId");
+			} else {
+				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+						.executeQuery("SELECT DISTINCT l.storeId FROM LandMark as l, Store as S Where S.storeCategory='"
+								+ type + "'and S.storeId = l.storeId");
+			}
 			while (result.next()) {
-				Attendance att = new Attendance(result.getInt("storeId"),0);
+				Attendance att = new Attendance(result.getInt("storeId"), 0);
 				Attendances.add(att);
 			}
-			for(Attendance a : Attendances) {
+			for (Attendance a : Attendances) {
 				int at = 0;
 				ResultSet result2 = this.connect
-						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-								"SELECT passing FROM LandMark Where storeId='"
-										+ a.getStoreId()
-										+ "'and (month(now()) - month(passingDate)) = 1");
+						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+						.executeQuery("SELECT passing FROM LandMark Where storeId='" + a.getStoreId()
+								+ "'and (month(now()) - month(passingDate)) = 1");
 				while (result2.next()) {
 					at += result2.getInt("passing");
 				}

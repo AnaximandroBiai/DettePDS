@@ -45,6 +45,7 @@ public class StockReturnView extends JFrame{
 		this.setSize(700, 700);
 		this.setResizable(false);
 
+		jtfTypes.addItem("All");
 		for (String type: types){
 		jtfTypes.addItem(type);
 		}

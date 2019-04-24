@@ -91,12 +91,20 @@ public class TurnoverDAO extends Dao<Turnover> {
 	
 	public Collection<Turnover> find(String type) {
 		Collection<Turnover> Turnovers = new ArrayList<Turnover>();
+		ResultSet result = null;
 		try {
-			ResultSet result = this.connect
+			if(type.equals("All")) {
+				result = this.connect
+						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
+								"SELECT DISTINCT P.storeId FROM PurchaseHistory as P, Store as S Where S.storeId = P.storeId");
+			}
+			else{
+				result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
 							"SELECT DISTINCT P.storeId FROM PurchaseHistory as P, Store as S Where S.storeCategory='"
 									+ type
 									+ "'and S.storeId = P.storeId");
+			}
 			while (result.next()) {
 				Turnover turnO = new Turnover(result.getInt("storeId"),0);
 				Turnovers.add(turnO);

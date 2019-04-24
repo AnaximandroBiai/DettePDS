@@ -42,7 +42,8 @@ public class AttendanceView extends JFrame{
 		this.setTitle("PhyGit Mall: Mall activity indicators");
 		this.setSize(700, 700);
 		this.setResizable(false);
-
+		
+		jtfCats.addItem("All");
 		for (String cat : cats) {
 		jtfCats.addItem(cat);
 		}
