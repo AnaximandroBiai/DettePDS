@@ -118,7 +118,7 @@ public class TestDAO extends Dao<Test>{
 	}
 
 	/**
-	 * public method to find categories in the database
+	 * public method to find types in the database
 	 * @return String
 	 */
 	public Collection<String> findTypes() {
@@ -130,6 +130,25 @@ public class TestDAO extends Dao<Test>{
 	            	types.add(type);
 	            }
 	            return types;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return null;
+	}
+	
+	/**
+	 * public method to find store names in the database
+	 * @return String
+	 */
+	public Collection<String> findNames() {
+		Collection<String> names = new ArrayList<String>();
+		  try{
+	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT storeName FROM Store");
+	            while(result.next()) {
+	            	String name = result.getString("storeName");
+	            	names.add(name);
+	            }
+	            return names;
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }

@@ -56,35 +56,26 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 		return null;
 	}
 
-	public Collection<Royalties> findRoyaltiesDue(String type) {
-		Collection<Royalties> royaltiesDue = new ArrayList<Royalties>();
+	public Royalties findRoyaltiesDue(int id) {
 		ResultSet result = null;
 		try {
-			if (type.equals("All")) {
-				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+		result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT L.area, L.occupancyRate, O.storeId FROM Location as L, Occupation as O, Store as S Where"
-										+ " S.storeId = O.storeId and O.locationId = L.locationId");
-			} else {
-				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-						.executeQuery(
-								"SELECT L.area, L.occupancyRate, O.storeId FROM Location as L, Occupation as O, Store as S Where S.storeCategory = "
-										+ type + " S.storeId = O.storeId and O.locationId = L.locationId");
-			}
+								"SELECT L.area, L.occupancyRate, O.storeId FROM Location as L, Occupation as O, Store as S, RoyaltiesHistory as R Where R.storeId = "
+										+ id + " and R.storeId = S.storeId and S.storeId = O.storeId and O.locationId = L.locationId");
 			while (result.next()) {
 				int amount = 166 * result.getInt("L.area");
 				amount += amount * result.getInt("L.occupancyRate");
-
 				Royalties rD = new Royalties(amount, result.getInt("S.storeId"));
-				royaltiesDue.add(rD);
+				return rD;
 			}
-			return royaltiesDue;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 
 	}
+	
 
 	public Collection<Royalties> findRoyaltiesPaid(String type) {
 		Collection<Royalties> royaltiesPaid = new ArrayList<Royalties>();
@@ -102,6 +93,27 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 								+type
 								+" and S.storeId = R.storeId and (month(now()) - month(R.royaltiesDate)) = 1");
 			}
+			while (result.next()) {
+				Royalties rP = new Royalties(result.getInt("R.royaltiesPaid"), result.getInt("S.storeId"));
+				royaltiesPaid.add(rP);
+			}
+			return royaltiesPaid;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
+	public Collection<Royalties> findRoyaltiesPaidByName(String name) {
+		Collection<Royalties> royaltiesPaid = new ArrayList<Royalties>();
+		ResultSet result = null;
+		try {
+				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+						.executeQuery(
+								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeName = " 
+								+name
+								+" and S.storeId = R.storeId and (month(now()) - month(R.royaltiesDate)) = 1");
 			while (result.next()) {
 				Royalties rP = new Royalties(result.getInt("R.royaltiesPaid"), result.getInt("S.storeId"));
 				royaltiesPaid.add(rP);

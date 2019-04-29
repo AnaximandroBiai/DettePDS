@@ -97,21 +97,27 @@ public class ServerProcessor implements Runnable {
 						String json = "Connection Done\n";
 						writer.write(json);
 						writer.flush();
-						TestDAO categories = new TestDAO(this.con);
-						Collection<String> cats = categories.findCategories();
+						TestDAO datas = new TestDAO(this.con);
+						Collection<String> cats = datas.findCategories();
 						String jsonC = gson.toJson(cats);
 						System.out.println(jsonC);
 						writer.write(jsonC);
 						writer.flush();
-						Collection<String> types = categories.findTypes();
+						Collection<String> types = datas.findTypes();
 						String jsonT = gson.toJson(types);
 						System.out.println(jsonT);
 						writer.write(jsonT);
+						writer.flush();
+						Collection<String> names = datas.findNames();
+						String jsonN = gson.toJson(names);
+						System.out.println(jsonN);
+						writer.write(jsonN);
 						writer.flush();
 						System.out.println(conP.getListDispo().size() + " available connections");
 						System.out.println(conP.getListUsed().size() + " used connections");
 					}
 					break;
+					
 				case "FINDTURNOVERS\n":
 					// Server understands the action asked, he returns "OK"
 					String toSendT = "OK for find\n";
@@ -137,6 +143,7 @@ public class ServerProcessor implements Runnable {
 
 					}
 					break;
+					
 				case "FINDSTORE\n":
 					// Server understands the action asked, he returns "OK"
 					String toSendS = "OK for find\n";
@@ -163,6 +170,7 @@ public class ServerProcessor implements Runnable {
 
 					}
 					break;
+					
 				case "FINDATTENDANCE\n":
 					//Server understands the action asked, he returns "OK"
 					String toSendA = "OK for find\n";
@@ -187,6 +195,7 @@ public class ServerProcessor implements Runnable {
 
 					}
 					break;
+					
 				case "FINDRETURNS\n":
 					//Server understands the action asked, he returns "OK"
 					String toSendR = "OK for find\n";
@@ -278,6 +287,59 @@ public class ServerProcessor implements Runnable {
 
 					}else {
 						writer.write(jsonFindL);
+						writer.flush();
+
+					}
+					break;
+					
+				case "FINDROYALTIESPAID\n":
+					// Server understands the action asked, he returns "OK"
+					String toSendRP = "OK for find\n";
+					// the Server waits for the data
+					writer.write(toSendRP);
+					writer.flush();
+					// the server read the data
+					String toFindRP = read();
+					System.out.println("Donnée reçue sur le server: " + toFindRP);
+					RoyaltiesDAO rPDaoFind = new RoyaltiesDAO(con);
+					Collection<Royalties> rPFind = rPDaoFind.findRoyaltiesPaid(toFindRP);
+					String jsonFindRP = gson.toJson(rPFind);
+					// the server looks and find (or not) the data asked and return his answer to
+					// the client
+					if (jsonFindRP == null) {
+						String failFind = "";
+						writer.write(failFind);
+						writer.flush();
+
+					} else {
+						writer.write(jsonFindRP);
+						writer.flush();
+
+					}
+					break;
+					
+				case "FINDROYALTIESDUE\n":
+					// Server understands the action asked, he returns "OK"
+					String toSendRD = "OK for find\n";
+					// the Server waits for the data
+					writer.write(toSendRD);
+					writer.flush();
+					// the server read the data
+					String toFindRD = read();
+					int sTRId = Integer.valueOf(toFindRD);
+					System.out.println("Donnée reçue sur le server: " + sTRId);
+					RoyaltiesDAO rDDaoFind = new RoyaltiesDAO(con);
+					Royalties rDFind = rDDaoFind.findRoyaltiesDue(sTRId);
+					String jsonFindRD = gson.toJson(rDFind);
+					// the server looks and find (or not) the data asked and return his answer to
+					// the client
+					if (jsonFindRD == null) {
+						String failFind = "";
+						writer.write(failFind);
+						writer.flush();
+
+					} else {
+						writer.write(jsonFindRD);
 						writer.flush();
 
 					}

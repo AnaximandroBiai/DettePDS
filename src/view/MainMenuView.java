@@ -36,16 +36,16 @@ public class MainMenuView extends JFrame {
 	private JButton occupationButton = new JButton("Occupation");
 	private JPanel container = new JPanel();
 
-	public MainMenuView(Socket s, Collection<String> cats, Collection<String> types) {
+	public MainMenuView(Socket s, Collection<String> cats, Collection<String> types, Collection<String> names) {
 		this.setLocationRelativeTo(null);
 		this.setTitle("PhyGit Mall: Mall activity indicators");
 		this.setSize(600, 600);
 		this.setResizable(false);
 
 		dette.setFont(policeDette);
-		turnoverButton.addActionListener(new TurnoverButton(s, cats));
-		stockRButton.addActionListener(new ReturnButton(s, types));
-		attendanceButton.addActionListener(new AttendanceButton(s, cats));
+		turnoverButton.addActionListener(new TurnoverButton(s, cats, names));
+		stockRButton.addActionListener(new ReturnButton(s, types, names));
+		attendanceButton.addActionListener(new AttendanceButton(s, cats, names));
 		occupationButton.addActionListener(new OccupationButton(s));
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
@@ -87,10 +87,12 @@ public class MainMenuView extends JFrame {
 	private class TurnoverButton implements ActionListener {
 		private Socket s;
 		private Collection<String> cats;
+		private Collection<String> names;
 
-		public TurnoverButton(Socket s, Collection<String> cats) {
+		public TurnoverButton(Socket s, Collection<String> cats, Collection<String> names) {
 			this.s = s;
 			this.cats = cats;
+			this.names = names;
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -108,7 +110,7 @@ public class MainMenuView extends JFrame {
 		private Socket s;
 		private Collection<String> cats;
 
-		public AttendanceButton(Socket s, Collection<String> cats) {
+		public AttendanceButton(Socket s, Collection<String> cats, Collection<String> names) {
 			this.s = s;
 			this.cats = cats;
 		}
@@ -128,7 +130,7 @@ public class MainMenuView extends JFrame {
 		private Socket s;
 		private Collection<String> cats;
 
-		public ReturnButton(Socket s, Collection<String> types) {
+		public ReturnButton(Socket s, Collection<String> types, Collection<String> names) {
 			this.s = s;
 			this.cats = types;
 		}

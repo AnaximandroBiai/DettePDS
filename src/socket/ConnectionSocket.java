@@ -43,14 +43,15 @@ public class ConnectionSocket extends AbstractSocket {
             System.out.println(serverReturn);
             //connection available
             if(serverReturn.equals("Connection Done\n")) {
-            	Type getCats = new TypeToken<ArrayList<String>>(){}.getType();
+            	Type getdatas = new TypeToken<ArrayList<String>>(){}.getType();
             	//String jCats = read(b2);
             	//System.out.println(jCats);
-            	Collection<String> cats = gson.fromJson(reader, getCats);
+            	Collection<String> cats = gson.fromJson(reader, getdatas);
             	//String jTypes = read(b2);
-            	Collection<String> types = gson.fromJson(reader, getCats);
+            	Collection<String> types = gson.fromJson(reader, getdatas);
             	System.out.println(types);
-            	new view.MainMenuView(s, cats, types);
+            	Collection<String> names = gson.fromJson(reader, getdatas);
+            	new view.MainMenuView(s, cats, types, names);
             }
             //connection unavailable
             else {
