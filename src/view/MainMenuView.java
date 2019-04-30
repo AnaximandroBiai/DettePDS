@@ -33,7 +33,8 @@ public class MainMenuView extends JFrame {
 	private JButton turnoverButton = new JButton("Turnover");
 	private JButton stockRButton = new JButton("Returns");
 	private JButton attendanceButton = new JButton("Attendance");
-	private JButton occupationButton = new JButton("Occupation");
+	private JButton signsButton = new JButton("Signs");
+	private JButton storesButton = new JButton("Stores");
 	private JButton royaltiesButton = new JButton("Royalties");
 	private JPanel container = new JPanel();
 
@@ -47,7 +48,8 @@ public class MainMenuView extends JFrame {
 		turnoverButton.addActionListener(new TurnoverButton(s, cats, names));
 		stockRButton.addActionListener(new ReturnButton(s, types));
 		attendanceButton.addActionListener(new AttendanceButton(s, cats, names));
-		occupationButton.addActionListener(new OccupationButton(s));
+		signsButton.addActionListener(new SignsButton(s));
+		storesButton.addActionListener(new StoresButton(s));
 		royaltiesButton.addActionListener(new RoyaltiesButton(s, cats, names));
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
@@ -68,8 +70,10 @@ public class MainMenuView extends JFrame {
 		container.setLayout(new BorderLayout());
 		east.add(turnoverButton);
 		east.add(stockRButton);
+		east.add(storesButton);
 		west.add(attendanceButton);
-//		west.add(occupationButton);
+		west.add(royaltiesButton);
+		west.add(signsButton);
 		container.add(top, BorderLayout.NORTH);
 		container.add(center, BorderLayout.CENTER);
 		container.add(bot, BorderLayout.SOUTH);
@@ -145,10 +149,36 @@ public class MainMenuView extends JFrame {
 
 	}
 
-	private class OccupationButton implements ActionListener {
+	private class SignsButton implements ActionListener {
 		private Socket s;
 
-		public OccupationButton(Socket s) {
+		public SignsButton(Socket s) {
+			this.s = s;
+		}
+		public void actionPerformed(ActionEvent e) {
+			OccupationSocket oS = new OccupationSocket();
+			Collection<Integer> oNB = oS.getOccupation(s);
+			if (oNB == null) {
+				JFrame fenResp = new JFrame();
+				JPanel containerResp = new JPanel();
+				fenResp.setSize(150, 150);
+				fenResp.setLocationRelativeTo(null);
+				JLabel jlabResp = new JLabel("No datas");
+				containerResp.add(jlabResp, BorderLayout.CENTER);
+				fenResp.setContentPane(containerResp);
+				fenResp.setVisible(true);
+			} else {
+
+				new OccupationResultView(this.s, oNB);
+
+			}
+		}
+	}
+	
+	private class StoresButton implements ActionListener {
+		private Socket s;
+
+		public StoresButton(Socket s) {
 			this.s = s;
 		}
 		public void actionPerformed(ActionEvent e) {
@@ -172,7 +202,7 @@ public class MainMenuView extends JFrame {
 	}
 	
 	/**
-	 * Intern class AttendanceButton. When the user clicks on the button the
+	 * Intern class RoyaltiesButton. When the user clicks on the button the
 	 * category is sent to server.
 	 *
 	 */
