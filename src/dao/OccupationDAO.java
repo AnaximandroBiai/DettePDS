@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.mysql.jdbc.StringUtils;
+
 import pojo.Occupation;
 
 /**
@@ -104,6 +106,31 @@ public class OccupationDAO extends Dao<Occupation> {
 				}
 			}
 			return Occupations;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Collection<Occupation> findStores(String date) {
+		Collection<Occupation> Stores= new ArrayList<Occupation>();
+		ResultSet result = null;
+		try {
+			if(StringUtils.isNullOrEmpty(date)) {
+				result = this.connect
+						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+						.executeQuery("SELECT * from Occupation Where departureDate = null");
+			}
+			else {
+				result = this.connect
+						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+						.executeQuery("SELECT * from Occupation Where year(arrivalDate) <= "+ date + " and (departureDate = null or departureDate > "+ date +")");
+			}
+			while (result.next()) {
+				Occupation o = new Occupation(result.getInt("locationId"), result.getInt("storeId"), result.getString("arrivalDate"), result.getString("departureDate"));
+				Stores.add(o);
+			}
+			return Stores;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

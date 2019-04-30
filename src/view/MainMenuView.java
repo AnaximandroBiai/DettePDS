@@ -34,6 +34,7 @@ public class MainMenuView extends JFrame {
 	private JButton stockRButton = new JButton("Returns");
 	private JButton attendanceButton = new JButton("Attendance");
 	private JButton occupationButton = new JButton("Occupation");
+	private JButton royaltiesButton = new JButton("Royalties");
 	private JPanel container = new JPanel();
 
 	public MainMenuView(Socket s, Collection<String> cats, Collection<String> types, Collection<String> names) {
@@ -44,9 +45,10 @@ public class MainMenuView extends JFrame {
 
 		dette.setFont(policeDette);
 		turnoverButton.addActionListener(new TurnoverButton(s, cats, names));
-		stockRButton.addActionListener(new ReturnButton(s, types, names));
+		stockRButton.addActionListener(new ReturnButton(s, types));
 		attendanceButton.addActionListener(new AttendanceButton(s, cats, names));
 		occupationButton.addActionListener(new OccupationButton(s));
+		royaltiesButton.addActionListener(new RoyaltiesButton(s, cats, names));
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
 		JPanel east = new JPanel();
@@ -96,7 +98,7 @@ public class MainMenuView extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new TurnoverView(s, cats);
+			new TurnoverView(s, cats, names);
 		}
 
 	}
@@ -109,14 +111,16 @@ public class MainMenuView extends JFrame {
 	private class AttendanceButton implements ActionListener {
 		private Socket s;
 		private Collection<String> cats;
+		private Collection<String> names;
 
 		public AttendanceButton(Socket s, Collection<String> cats, Collection<String> names) {
 			this.s = s;
 			this.cats = cats;
+			this.names = names;
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new AttendanceView(s, cats);
+			new AttendanceView(s, cats, names);
 		}
 
 	}
@@ -130,7 +134,7 @@ public class MainMenuView extends JFrame {
 		private Socket s;
 		private Collection<String> cats;
 
-		public ReturnButton(Socket s, Collection<String> types, Collection<String> names) {
+		public ReturnButton(Socket s, Collection<String> types) {
 			this.s = s;
 			this.cats = types;
 		}
@@ -165,5 +169,27 @@ public class MainMenuView extends JFrame {
 
 			}
 		}
+	}
+	
+	/**
+	 * Intern class AttendanceButton. When the user clicks on the button the
+	 * category is sent to server.
+	 *
+	 */
+	private class RoyaltiesButton implements ActionListener {
+		private Socket s;
+		private Collection<String> cats;
+		private Collection<String> names;
+
+		public RoyaltiesButton(Socket s, Collection<String> cats, Collection<String> names) {
+			this.s = s;
+			this.cats = cats;
+			this.names = names;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			new RoyaltiesView(s, cats, names);
+		}
+
 	}
 }

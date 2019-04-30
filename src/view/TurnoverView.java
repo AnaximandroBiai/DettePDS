@@ -38,7 +38,7 @@ public class TurnoverView extends JFrame{
 	private JButton researchButton = new JButton("Research");
 	private JPanel container = new JPanel();
 
-	public TurnoverView(Socket s, Collection<String> cats) {
+	public TurnoverView(Socket s, Collection<String> cats, Collection<String> names) {
 		this.setLocationRelativeTo(null);
 		this.setTitle("PhyGit Mall: Mall activity indicators");
 		this.setSize(700, 700);
