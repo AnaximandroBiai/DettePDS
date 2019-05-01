@@ -64,8 +64,9 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 								"SELECT L.area, L.occupancyRate, O.storeId FROM Location as L, Occupation as O, Store as S, RoyaltiesHistory as R Where R.storeId = "
 										+ id + " and R.storeId = S.storeId and S.storeId = O.storeId and O.locationId = L.locationId");
 			while (result.next()) {
-				int amount = 166 * result.getInt("L.area");
+				int amount = (int) (166 * Math.sqrt(result.getInt("L.area")));
 				amount += amount * result.getInt("L.occupancyRate");
+				amount += amount * 0.2;
 				Royalties rD = new Royalties(amount, result.getInt("S.storeId"));
 				return rD;
 			}
