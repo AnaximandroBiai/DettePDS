@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.mysql.jdbc.StringUtils;
 
 import pojo.Occupation;
 
@@ -88,46 +87,40 @@ public class OccupationDAO extends Dao<Occupation> {
 
 	}
 
-	public Collection<Integer> findOccupation() {
-		Collection<Integer> Occupations = new ArrayList<Integer>();
-		try {
-			ResultSet compteur = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT COUNT(DISTINCT year(arrivalDate)) as count FROM Occupation");
-			int cpt = compteur.getInt("count");
-			for (int i = 1; i < cpt; i++) {
-				ResultSet result = this.connect
-						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-								"SELECT DISTINCT COUNT(arrivalDate) as count2 FROM Occupation Where departureDate = null and (month(now()) - month(arrivalDate)) = "
-										+ i);
-				while (result.next()) {
-					int cpt2 = compteur.getInt("count2");
-					Occupations.add(cpt2);
-				}
-			}
-			return Occupations;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+// Old Method	
+//	public Collection<Integer> findOccupation() {
+//		Collection<Integer> Occupations = new ArrayList<Integer>();
+//		try {
+//			ResultSet compteur = this.connect
+//					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+//					.executeQuery("SELECT COUNT(DISTINCT year(arrivalDate)) as count FROM Occupation");
+//			int cpt = compteur.getInt("count");
+//			for (int i = 1; i < cpt; i++) {
+//				ResultSet result = this.connect
+//						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
+//								"SELECT DISTINCT COUNT(arrivalDate) as count2 FROM Occupation Where departureDate = null and (month(now()) - month(arrivalDate)) = "
+//										+ i);
+//				while (result.next()) {
+//					int cpt2 = compteur.getInt("count2");
+//					Occupations.add(cpt2);
+//				}
+//			}
+//			return Occupations;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 	
-	public Collection<Occupation> findStores(String date) {
+	public Collection<Occupation> findStores(String year) {
 		Collection<Occupation> Stores= new ArrayList<Occupation>();
 		ResultSet result = null;
 		try {
-			if(StringUtils.isNullOrEmpty(date)) {
 				result = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-						.executeQuery("SELECT * from Occupation Where departureDate = null");
-			}
-			else {
-				result = this.connect
-						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-						.executeQuery("SELECT * from Occupation Where year(arrivalDate) <= "+ date + " and (departureDate = null or departureDate > "+ date +")");
-			}
+						.executeQuery("SELECT * from Occupation Where year(arrivalDate) <= "+ year + " and (year (departureDate) = 0000 or year(departureDate) > '"+ year +"')");
 			while (result.next()) {
-				Occupation o = new Occupation(result.getInt("locationId"), result.getInt("storeId"), result.getString("arrivalDate"), result.getString("departureDate"));
+				Occupation o = new Occupation(result.getInt("locationId"), result.getInt("storeId"), result.getString("arrivalDate"), "");
 				Stores.add(o);
 			}
 			return Stores;

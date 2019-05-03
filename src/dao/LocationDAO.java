@@ -83,10 +83,13 @@ public class LocationDAO extends Dao<Location> {
 	 */
 	public Integer locationNb() {
 		try {
-			ResultSet compteur = this.connect
+			int cpt = 0;
+			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT DISTINCT COUNT(*) as count FROM Loaction");
-			int cpt = compteur.getInt("count");
+					.executeQuery("SELECT COUNT(locationId) as count FROM Location");
+			while (result.next()) {
+				cpt = result.getInt("count");
+			}
 			return cpt;
 		} catch (SQLException e) {
 			e.printStackTrace();

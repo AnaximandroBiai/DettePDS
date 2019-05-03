@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.net.Socket;
+import java.util.Calendar;
 import java.util.Collection;
 
 import javax.swing.BorderFactory;
@@ -14,9 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import socket.LocationSocket;
+import pojo.Store;
 
-public class OccupationResultView extends JFrame {
+public class SignsResultView extends JFrame {
 
 	private Font policeDette = new Font("Arial", Font.BOLD, 28);
 
@@ -25,16 +26,14 @@ public class OccupationResultView extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public OccupationResultView(Socket s, Collection<Integer> oNB) {
+	public SignsResultView(Socket s, Collection<Store> sS, String year) {
 
-		LocationSocket lS = new LocationSocket();
-
-		this.setTitle("PhyGit Mall: Occupation Indicator");
+		this.setTitle("PhyGit Mall: Signs Indicator");
 		this.setSize(new Dimension(600, 600));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		JLabel dette = new JLabel("PhyGit Mall");
-		JLabel resultats = new JLabel("Please see the evolution of mall occupation");
+		JLabel resultats = new JLabel("Please see the number of signs");
 
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
@@ -62,15 +61,55 @@ public class OccupationResultView extends JFrame {
 		top.add(dette);
 		top.add(resultats);
 
-		int nbe = lS.getLocationNB(s);
-		if (!oNB.isEmpty()) {
-			for (Integer o : oNB) {
+		if (!sS.isEmpty()) {
+			JLabel result1 = null;
+			JLabel result2 = null;
+			JLabel result3 = null;
+			JLabel result4 = null;
+			JLabel result5 = null;
+			Calendar c = Calendar.getInstance();
+			int Sport = 0;
+			int Multimedia = 0;
+			int Vetement = 0;
+			int Hypermarche = 0;
+			for (Store sT : sS) {
+				switch (sT.getStoreCategory()) {
+				case "Sport":
+					Sport += 1;
+					break;
 
-				float percent = ((o * 100) / nbe);
-				JLabel result = new JLabel(
-						"Number of location : " + nbe + "  |  Location taked : " + o + " % taked: " + percent + "\n");
-				center.add(result);
+				case "Multimedia":
+					Multimedia += 1;
+					break;
+
+				case "Vetement":
+					Vetement += 1;
+					break;
+
+				case "Hypermarche":
+					Hypermarche += 1;
+					break;
+				}
 			}
+			if (Integer.valueOf(year).equals(c.get(Calendar.YEAR))) {
+				result1 = new JLabel("There is currently " + sS.size() + " signs with : \n");
+				result2 = new JLabel(Sport + " sport sign(s)\n");
+				result3 = new JLabel(Multimedia + " multimedia sign(s)\n");
+				result4 = new JLabel(Vetement + " clothing sign(s)\n");
+				result5 = new JLabel(Hypermarche + " hypermarket(s)\n\n");
+			} else {
+				result1 = new JLabel("At year " + String.valueOf(c.get(Calendar.YEAR)) + ", there was " + sS.size()
+						+ " signs with : \n");
+				result2 = new JLabel(Sport + " sport sign(s)\n");
+				result3 = new JLabel(Multimedia + " multimedia sign(s)\n");
+				result4 = new JLabel(Vetement + " clothing sign(s)\n");
+				result5 = new JLabel(Hypermarche + " hypermarket(s)\n\n");
+			}
+			center.add(result1);
+			center.add(result2);
+			center.add(result3);
+			center.add(result4);
+			center.add(result5);
 		} else {
 			JLabel result = new JLabel("No datas available");
 			center.add(result);

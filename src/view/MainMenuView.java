@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.Socket;
+import java.util.Calendar;
 import java.util.Collection;
 
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import pojo.Store;
 import socket.OccupationSocket;
 
 /**
@@ -58,8 +60,8 @@ public class MainMenuView extends JFrame {
 		JPanel bot = new JPanel();
 		top.setPreferredSize(new Dimension(100, 250));
 		center.setPreferredSize(new Dimension(100, 60));
-		west.setPreferredSize(new Dimension(100, 600));
-		east.setPreferredSize(new Dimension(100, 600));
+		west.setPreferredSize(new Dimension(200, 600));
+		east.setPreferredSize(new Dimension(200, 600));
 		bot.setPreferredSize(new Dimension(100, 250));
 		GridLayout layoutCenter = new GridLayout(2, 1);
 		GridLayout layoutTop = new GridLayout(1, 2);
@@ -157,8 +159,10 @@ public class MainMenuView extends JFrame {
 		}
 		public void actionPerformed(ActionEvent e) {
 			OccupationSocket oS = new OccupationSocket();
-			Collection<Integer> oNB = oS.getOccupation(s);
-			if (oNB == null) {
+			Calendar c = Calendar.getInstance();
+			String year = String.valueOf(c.get(Calendar.YEAR));
+			Collection<Store> sS = oS.getSigns(s, year);
+			if (sS == null) {
 				JFrame fenResp = new JFrame();
 				JPanel containerResp = new JPanel();
 				fenResp.setSize(150, 150);
@@ -169,7 +173,7 @@ public class MainMenuView extends JFrame {
 				fenResp.setVisible(true);
 			} else {
 
-				new OccupationResultView(this.s, oNB);
+				new SignsResultView(this.s, sS, year);
 
 			}
 		}
@@ -183,8 +187,10 @@ public class MainMenuView extends JFrame {
 		}
 		public void actionPerformed(ActionEvent e) {
 			OccupationSocket oS = new OccupationSocket();
-			Collection<Integer> oNB = oS.getOccupation(s);
-			if (oNB == null) {
+			Calendar c = Calendar.getInstance();
+			String year = String.valueOf(c.get(Calendar.YEAR));
+			Collection<Store> sTNB = oS.getStores(s, year);
+			if (sTNB == null) {
 				JFrame fenResp = new JFrame();
 				JPanel containerResp = new JPanel();
 				fenResp.setSize(150, 150);
@@ -195,7 +201,7 @@ public class MainMenuView extends JFrame {
 				fenResp.setVisible(true);
 			} else {
 
-				new OccupationResultView(this.s, oNB);
+				new StoresResultView(this.s, sTNB, year);
 
 			}
 		}

@@ -244,25 +244,27 @@ public class ServerProcessor implements Runnable {
 					}
 					break;
 					
-				case "FINDOCCUPATION\n":
+				case "FINDSTORES\n":
 					//Server understands the action asked, he returns "OK"
-					String toSendO = "OK for find";
+					String toSendSTS = "OK for find";
 					//the Server waits for the data
-					writer.write(toSendO);
+					writer.write(toSendSTS);
 					writer.flush();
 					//the server read the data
+					String toFindY = read();
+					System.out.println("Donnée reçue sur le server: "+toFindY);
 					System.out.println("Count in progress: ");
-					OccupationDAO oDaoFind = new OccupationDAO(con);
-					Collection<Integer> oFind = oDaoFind.findOccupation();
-					String jsonFindO = gson.toJson(oFind);
+					OccupationDAO sTSDaoFind = new OccupationDAO(con);
+					Collection<Occupation> oFind = sTSDaoFind.findStores(toFindY);
+					String jsonFindSTS = gson.toJson(oFind);
 					//the server looks and find (or not) the data asked and return his answer to the client
-					if(jsonFindO == null){
+					if(jsonFindSTS == null){
 						String failFind = "";
 						writer.write(failFind);
 						writer.flush();
 
 					}else {
-						writer.write(jsonFindO);
+						writer.write(jsonFindSTS);
 						writer.flush();
 
 					}
@@ -318,7 +320,7 @@ public class ServerProcessor implements Runnable {
 					}
 					break;
 					
-				case "FINDROYALTIESDUE\n":
+				case "FINDROYALTIESASKED\n":
 					// Server understands the action asked, he returns "OK"
 					String toSendRD = "OK for find\n";
 					// the Server waits for the data
@@ -329,7 +331,7 @@ public class ServerProcessor implements Runnable {
 					int sTRId = Integer.valueOf(toFindRD);
 					System.out.println("Donnée reçue sur le server: " + sTRId);
 					RoyaltiesDAO rDDaoFind = new RoyaltiesDAO(con);
-					Royalties rDFind = rDDaoFind.findRoyaltiesDue(sTRId);
+					Royalties rDFind = rDDaoFind.findRoyaltiesAsked(sTRId);
 					String jsonFindRD = gson.toJson(rDFind);
 					// the server looks and find (or not) the data asked and return his answer to
 					// the client

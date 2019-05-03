@@ -48,14 +48,14 @@ public class RoyaltiesSocket extends AbstractSocket{
 		}
 	}
 	
-	public Royalties getRoyaltiesDue(Socket s, int id) {
+	public Royalties getRoyaltiesAsked(Socket s, int id) {
 		try {
 			GsonBuilder builder = new GsonBuilder();
 			Gson gson = builder.create();
 			PrintWriter w1 = new PrintWriter(s.getOutputStream(), true);
 			BufferedInputStream b2 = new BufferedInputStream(s.getInputStream());
 			// We inform the server that we want to find data in database
-			String demand = "FINDROYALTIESDUE\n";
+			String demand = "FINDROYALTIESASKED\n";
 			w1.write(demand);
 			w1.flush();
 			// we wait for server's response
@@ -67,7 +67,7 @@ public class RoyaltiesSocket extends AbstractSocket{
 			// we read the response from the server
 			String retourServer = read(b2);
 			System.out.println("retour du serveur:" + retourServer);
-			Type getRSP = new TypeToken<ArrayList<Royalties>>(){}.getType();
+			Type getRSP = new TypeToken<Royalties>(){}.getType();
 			Royalties rSD = gson.fromJson(retourServer, getRSP);
 			return rSD;
 		} catch (IOException e) {

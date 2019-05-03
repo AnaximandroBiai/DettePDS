@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -11,14 +12,19 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import pojo.Royalties;
 import pojo.Store;
 import socket.RoyaltiesSocket;
 import socket.StoreSocket;
 
+/**
+ * @author anax
+ * @version 1.0 This is the Royalties view which display the results of the
+ *          research
+ */
 public class RoyaltiesResultView extends JFrame{
-
 	/**
 	 * 
 	 */
@@ -27,15 +33,15 @@ public class RoyaltiesResultView extends JFrame{
 	
 	public RoyaltiesResultView(Socket s, Collection<Royalties> royaltiesPaid, String cat) {
 		
-		
+		StoreSocket sTS = new StoreSocket();
 
-		this.setTitle("PhyGit Mall: Attendance Indicator");
+		this.setTitle("PhyGit Mall: Royalties Indicator");
 		this.setSize(new Dimension(600, 600));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		Collection<Royalties> rSP = royaltiesPaid;
 		JLabel dette = new JLabel("PhyGit Mall");
-		JLabel resultats = new JLabel("Past month attendance for the stores of the category :" + cat);
+		JLabel resultats = new JLabel("Past month royalties for the stores of the category :" + cat);
 
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
@@ -64,21 +70,30 @@ public class RoyaltiesResultView extends JFrame{
 		top.add(resultats);
 
 		if (!rSP.isEmpty()) {
-			StoreSocket sTS = new StoreSocket();
+			
 			RoyaltiesSocket rS = new RoyaltiesSocket();
 			for (Royalties r : rSP) {
 
 				Store sT = sTS.getStore(s, r.getStoreId());
-				Royalties rD = rS.getRoyaltiesDue(s, r.getStoreId());
+				Royalties rA = rS.getRoyaltiesAsked(s, r.getStoreId());
 
-				JLabel result = new JLabel("Store : " + sT.getStoreName() + "  |  Royalties due : "
-						+ String.valueOf(rD.getAmount()) + "€ | RoyaltiesPaid : " + String.valueOf(r.getAmount()));
+				JLabel result = new JLabel("Store : " + sT.getStoreName() + "  |  Royalties asked : "
+						+ String.valueOf(rA.getAmount()) + "€ | Royalties paid : " + String.valueOf(r.getAmount()) +" € | Royalties due : " +String.valueOf((rA.getAmount() - r.getAmount()) +"€\n"));
 				center.add(result);
 			}
 		} else {
 			JLabel result = new JLabel("No datas for this sector");
 			center.add(result);
 		}
+		
+		this.add(top, BorderLayout.NORTH);
+		this.add(west, BorderLayout.WEST);
+		this.add(east, BorderLayout.EAST);
+		this.add(bot, BorderLayout.SOUTH);
+		this.add(center, BorderLayout.CENTER);
+
+		this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+		this.setVisible(true);
 	}
 
 }

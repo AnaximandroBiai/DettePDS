@@ -56,7 +56,7 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 		return null;
 	}
 
-	public Royalties findRoyaltiesDue(int id) {
+	public Royalties findRoyaltiesAsked(int id) {
 		ResultSet result = null;
 		try {
 		result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
@@ -65,9 +65,9 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 										+ id + " and R.storeId = S.storeId and S.storeId = O.storeId and O.locationId = L.locationId");
 			while (result.next()) {
 				int amount = (int) (166 * Math.sqrt(result.getInt("L.area")));
-				amount += amount * result.getInt("L.occupancyRate");
+				amount += amount * result.getFloat("L.occupancyRate");
 				amount += amount * 0.2;
-				Royalties rD = new Royalties(amount, result.getInt("S.storeId"));
+				Royalties rD = new Royalties(amount, result.getInt("storeId"));
 				return rD;
 			}
 		} catch (SQLException e) {
@@ -85,17 +85,16 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 			if (type.equals("All")) {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where"
-										+ " S.storeId = R.storeId and (month(now()) - month(R.royaltiesDate)) = 1");
+								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeId = R.storeId and (month(now()) - month(R.royaltiesDate)) = 1");
 			} else {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeCategory = " 
+								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeCategory ='" 
 								+type
-								+" and S.storeId = R.storeId and (month(now()) - month(R.royaltiesDate)) = 1");
+								+"' and S.storeId = R.storeId and (month(now()) - month(R.royaltiesDate)) = 1");
 			}
 			while (result.next()) {
-				Royalties rP = new Royalties(result.getInt("R.royaltiesPaid"), result.getInt("S.storeId"));
+				Royalties rP = new Royalties(result.getInt("royaltiesPaid"), result.getInt("storeId"));
 				royaltiesPaid.add(rP);
 			}
 			return royaltiesPaid;
@@ -112,11 +111,11 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 		try {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeName = " 
+								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeName = '" 
 								+name
-								+" and S.storeId = R.storeId and (month(now()) - month(R.royaltiesDate)) = 1");
+								+"' and S.storeId = R.storeId and (month(now()) - month(R.royaltiesDate)) = 1");
 			while (result.next()) {
-				Royalties rP = new Royalties(result.getInt("R.royaltiesPaid"), result.getInt("S.storeId"));
+				Royalties rP = new Royalties(result.getInt("R.royaltiesPaid"), result.getInt("R.storeId"));
 				royaltiesPaid.add(rP);
 			}
 			return royaltiesPaid;
