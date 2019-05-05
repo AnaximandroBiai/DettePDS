@@ -16,42 +16,37 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import pojo.Turnover;
-import socket.TurnoverSocket;
+import pojo.Store;
+import socket.OccupationSocket;
+
 
 
 /**
  * @author anax
- * @version 1.0 This is the Turnover view which allows to see the turnover of the differents stores of
- *          a category
+ * @version 1.0 This is the Turnover view which allows to see the differents stores
  */
-public class TurnoverView extends JFrame{
+public class StoresView extends JFrame{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel researchText = new JLabel("Please choose the category turnover you want to see: ");
+	private JLabel researchText = new JLabel("Please choose the year you want to see: ");
 	private JLabel dette = new JLabel("PhyGit Mall");
 	private Font policeDette = new Font("Arial", Font.BOLD, 28);
-	public JComboBox<String> jtfCats = new JComboBox<String>();
 	public JComboBox<String> jtfYears = new JComboBox<String>();
 	private boolean displayConnectionScreen = true;
 	private JButton researchButton = new JButton("Research");
 	private JPanel container = new JPanel();
 
-	public TurnoverView(Socket s, Collection<String> cats) {
+	public StoresView(Socket s) {
 		this.setLocationRelativeTo(null);
 		this.setTitle("PhyGit Mall: Mall activity indicators");
 		this.setSize(700, 700);
 		this.setResizable(false);
 
-		jtfCats.addItem("All");
-		for (String cat : cats) {
-		jtfCats.addItem(cat);
-		}
 		Calendar c = Calendar.getInstance();
-		for(int i = 1; i<=4; i++) {
+		for(int i = 0; i<=4; i++) {
 			int year = c.get(Calendar.YEAR);
 			year -= i;
 			jtfYears.addItem(String.valueOf(year));
@@ -75,7 +70,6 @@ public class TurnoverView extends JFrame{
 		top.add(dette);
 		top.add(researchText);
 		container.setLayout(new BorderLayout());
-		center.add(jtfCats);
 		center.add(jtfYears);
 		bot.add(researchButton);
 		container.add(top, BorderLayout.NORTH);
@@ -100,11 +94,10 @@ public class TurnoverView extends JFrame{
 			this.s = s;
 		}
 		public void actionPerformed(ActionEvent e) {
-			String cat = (String) jtfCats.getSelectedItem();
 			String year = (String) jtfYears.getSelectedItem();
-			TurnoverSocket tS = new TurnoverSocket();
-			Collection<Turnover> tOS = tS.getTurnovers(s, cat, year);
-			if (tOS == null) {
+			OccupationSocket oS = new OccupationSocket();
+			Collection<Store> sTNB = oS.getStores(s, year);
+			if (sTNB == null) {
 				JFrame fenResp = new JFrame();
 				JPanel containerResp = new JPanel();
 				fenResp.setSize(150, 150);
@@ -114,10 +107,11 @@ public class TurnoverView extends JFrame{
 				fenResp.setContentPane(containerResp);
 				fenResp.setVisible(true);
 			} else {
-				
-				new TurnoverResultView(this.s, tOS, cat);
-				
-				}
+
+				new StoresResultView(this.s, sTNB, year);
+
+			}
 			}
 		}
+
 }

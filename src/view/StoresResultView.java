@@ -107,7 +107,7 @@ public class StoresResultView extends JFrame {
 			}
 			else {
 				result1 = new JLabel(
-						"At year " + String.valueOf(c.get(Calendar.YEAR)) + ", there was " +sTS.size()+ " stores with : \n");
+						"At year " + year + ", there was " +sTS.size()+ " stores with : \n");
 				result2 = new JLabel(Sport + " sport store(s)\n");
 				result3 = new JLabel(Multimedia + " multimedia store(s)\n");
 				result4 = new JLabel(Vetement + " clothing store(s)\n");

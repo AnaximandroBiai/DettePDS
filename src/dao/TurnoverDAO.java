@@ -89,21 +89,21 @@ public class TurnoverDAO extends Dao<Turnover> {
 //		return null;
 //	}
 	
-	public Collection<Turnover> find(String type) {
+	public Collection<Turnover> find(String type, String year) {
 		Collection<Turnover> Turnovers = new ArrayList<Turnover>();
 		ResultSet result = null;
 		try {
 			if(type.equals("All")) {
 				result = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-								"SELECT DISTINCT P.storeId FROM PurchaseHistory as P, Store as S Where S.storeId = P.storeId");
+								"SELECT DISTINCT P.storeId FROM PurchaseHistory as P, Store as S Where S.storeId = P.storeId and year(P.purchaseDate) = '" + year +"'");
 			}
 			else{
 				result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
 							"SELECT DISTINCT P.storeId FROM PurchaseHistory as P, Store as S Where S.storeCategory='"
 									+ type
-									+ "'and S.storeId = P.storeId");
+									+ "'and S.storeId = P.storeId and year(P.purchaseDate) = '" + year +"'");
 			}
 			while (result.next()) {
 				Turnover turnO = new Turnover(result.getInt("storeId"),0);
@@ -115,7 +115,7 @@ public class TurnoverDAO extends Dao<Turnover> {
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
 								"SELECT Pr.price, P.quantity FROM PurchaseHistory as P, Product as Pr Where P.storeId='"
 										+ t.getStoreId()
-										+ "'and Pr.productId = P.productId and (year(now()) - year(P.purchaseDate)) = 1");
+										+ "'and Pr.productId = P.productId and year(P.purchaseDate) = '" + year +"'");
 				while (result2.next()) {
 					turn += (result2.getInt("price") * result2.getInt("quantity"));
 				}

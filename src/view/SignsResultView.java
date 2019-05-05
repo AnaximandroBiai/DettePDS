@@ -98,7 +98,7 @@ public class SignsResultView extends JFrame {
 				result4 = new JLabel(Vetement + " clothing sign(s)\n");
 				result5 = new JLabel(Hypermarche + " hypermarket(s)\n\n");
 			} else {
-				result1 = new JLabel("At year " + String.valueOf(c.get(Calendar.YEAR)) + ", there was " + sS.size()
+				result1 = new JLabel("At year " + year + ", there was " + sS.size()
 						+ " signs with : \n");
 				result2 = new JLabel(Sport + " sport sign(s)\n");
 				result3 = new JLabel(Multimedia + " multimedia sign(s)\n");

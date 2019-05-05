@@ -20,7 +20,7 @@ import pojo.Turnover;
  * This TurnoverSocket class is used to return turnover datas
  */
 public class TurnoverSocket extends AbstractSocket{
-	public Collection<Turnover> getTurnovers(Socket s, String cat){
+	public Collection<Turnover> getTurnovers(Socket s, String cat, String year){
 		try {
 			GsonBuilder builder = new GsonBuilder();
 			Gson gson = builder.create();
@@ -35,6 +35,8 @@ public class TurnoverSocket extends AbstractSocket{
 			System.out.println(reponse);
 			// Now we send to server the JSON file, with the data to insert
 			w1.write(cat);
+			w1.flush();
+			w1.write(year);
 			w1.flush();
 			// we read the response from the server
 			String retourServer = read(b2);
