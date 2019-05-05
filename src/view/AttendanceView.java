@@ -7,6 +7,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.Socket;
+import java.time.Month;
+import java.util.Calendar;
 import java.util.Collection;
 
 import javax.swing.JButton;
@@ -33,11 +35,12 @@ public class AttendanceView extends JFrame{
 	private JLabel dette = new JLabel("PhyGit Mall");
 	private Font policeDette = new Font("Arial", Font.BOLD, 28);
 	public JComboBox<String> jtfCats = new JComboBox<String>();
+	public JComboBox<String> jtfMonths = new JComboBox<String>();
 	private boolean displayConnectionScreen = true;
 	private JButton researchButton = new JButton("Research");
 	private JPanel container = new JPanel();
 	
-	public AttendanceView(Socket s, Collection<String> cats, Collection<String> names) {
+	public AttendanceView(Socket s, Collection<String> cats) {
 		this.setLocationRelativeTo(null);
 		this.setTitle("PhyGit Mall: Mall activity indicators");
 		this.setSize(700, 700);
@@ -46,6 +49,13 @@ public class AttendanceView extends JFrame{
 		jtfCats.addItem("All");
 		for (String cat : cats) {
 		jtfCats.addItem(cat);
+		}
+		Calendar c = Calendar.getInstance();
+		for(int i = 0; i<4; i++) {
+			int month = c.get(Calendar.MONTH);
+			month -= i;
+			String monthS = Month.of(month).toString();
+			jtfMonths.addItem(monthS);
 		}
 		dette.setFont(policeDette);
 		researchButton.addActionListener(new ResearchButton(s));
@@ -67,6 +77,7 @@ public class AttendanceView extends JFrame{
 		top.add(researchText);
 		container.setLayout(new BorderLayout());
 		center.add(jtfCats);
+		center.add(jtfMonths);
 		bot.add(researchButton);
 		container.add(top, BorderLayout.NORTH);
 		container.add(center, BorderLayout.CENTER);
@@ -91,8 +102,9 @@ public class AttendanceView extends JFrame{
 		}
 		public void actionPerformed(ActionEvent e) {
 			String cat = (String) jtfCats.getSelectedItem();
+			String month = (String) jtfMonths.getSelectedItem();
 			AttendanceSocket aS = new AttendanceSocket();
-			Collection<Attendance> aOS = aS.getAttendance(s, cat);
+			Collection<Attendance> aOS = aS.getAttendance(s, cat, month);
 			if (aOS == null) {
 				JFrame fenResp = new JFrame();
 				JPanel containerResp = new JPanel();

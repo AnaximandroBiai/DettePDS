@@ -22,7 +22,7 @@ import pojo.Attendance;
  */
 public class AttendanceSocket extends AbstractSocket{
 
-	public Collection<Attendance> getAttendance(Socket s, String cat){
+	public Collection<Attendance> getAttendance(Socket s, String cat, String month){
 		try {
 			GsonBuilder builder = new GsonBuilder();
 			Gson gson = builder.create();
@@ -37,6 +37,8 @@ public class AttendanceSocket extends AbstractSocket{
 			System.out.println(reponse);
 			// Now we send to server the JSON file, with the data to insert
 			w1.write(cat);
+			w1.flush();
+			w1.write(month);
 			w1.flush();
 			// we read the response from the server
 			String retourServer = read(b2);

@@ -7,6 +7,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.Socket;
+import java.time.Month;
+import java.util.Calendar;
 import java.util.Collection;
 
 import javax.swing.JButton;
@@ -35,6 +37,7 @@ public class StockReturnView extends JFrame{
 	private JLabel dette = new JLabel("PhyGit Mall");
 	private Font policeDette = new Font("Arial", Font.BOLD, 28);
 	public JComboBox<String> jtfTypes = new JComboBox<String>();
+	public JComboBox<String> jtfMonths = new JComboBox<String>();
 	private boolean displayConnectionScreen = true;
 	private JButton researchButton = new JButton("Research");
 	private JPanel container = new JPanel();
@@ -48,6 +51,13 @@ public class StockReturnView extends JFrame{
 		jtfTypes.addItem("All");
 		for (String type: types){
 		jtfTypes.addItem(type);
+		}
+		Calendar c = Calendar.getInstance();
+		for(int i = 0; i<4; i++) {
+			int month = c.get(Calendar.MONTH);
+			month -= i;
+			String monthS = Month.of(month).toString();
+			jtfMonths.addItem(monthS);
 		}
 		dette.setFont(policeDette);
 		researchButton.addActionListener(new ResearchButton(s));
@@ -69,6 +79,7 @@ public class StockReturnView extends JFrame{
 		top.add(researchText);
 		container.setLayout(new BorderLayout());
 		center.add(jtfTypes);
+		center.add(jtfMonths);
 		bot.add(researchButton);
 		container.add(top, BorderLayout.NORTH);
 		container.add(center, BorderLayout.CENTER);
@@ -93,8 +104,9 @@ public class StockReturnView extends JFrame{
 		}
 		public void actionPerformed(ActionEvent e) {
 			String type = (String) jtfTypes.getSelectedItem();
+			String month = (String) jtfMonths.getSelectedItem();
 			StockRSocket sRS = new StockRSocket();
-			Collection<Stock> sR = sRS.getReturns(s, type);
+			Collection<Stock> sR = sRS.getReturns(s, type, month);
 			if (sR == null) {
 				JFrame fenResp = new JFrame();
 				JPanel containerResp = new JPanel();

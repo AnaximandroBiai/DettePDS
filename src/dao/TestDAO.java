@@ -69,13 +69,13 @@ public class TestDAO extends Dao<Test>{
 		return false;
 	}
 
-	@Override
+	
 	/**
 	 * public method to find occurence by @lName and @fName in the database
 	 * @param Test obj
 	 * @return Test
 	 */
-	public Test find(String lName, String fName) {
+	public Test findT(String lName, String fName) {
 		  try{
 	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT id, lastname, firstname FROM test Where lastname='"+lName+"' and firstname='"+fName+"'");
 	            while(result.next()) {

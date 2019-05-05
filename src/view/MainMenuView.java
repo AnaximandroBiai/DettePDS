@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.Socket;
-import java.util.Calendar;
 import java.util.Collection;
 
 import javax.swing.JButton;
@@ -15,8 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import pojo.Store;
-import socket.OccupationSocket;
 
 /**
  * @author anax
@@ -47,9 +44,9 @@ public class MainMenuView extends JFrame {
 		this.setResizable(false);
 
 		dette.setFont(policeDette);
-		turnoverButton.addActionListener(new TurnoverButton(s, cats, names));
+		turnoverButton.addActionListener(new TurnoverButton(s, cats));
 		stockRButton.addActionListener(new ReturnButton(s, types));
-		attendanceButton.addActionListener(new AttendanceButton(s, cats, names));
+		attendanceButton.addActionListener(new AttendanceButton(s, cats));
 		signsButton.addActionListener(new SignsButton(s));
 		storesButton.addActionListener(new StoresButton(s));
 		royaltiesButton.addActionListener(new RoyaltiesButton(s, cats, names));
@@ -88,52 +85,45 @@ public class MainMenuView extends JFrame {
 	}
 
 	/**
-	 * Intern class TurnoverButton. When the user clicks on the button the category
-	 * is sent to server.
+	 * Intern class TurnoverButton. When the user clicks on the button he goes to the Turnover View.
 	 *
 	 */
 	private class TurnoverButton implements ActionListener {
 		private Socket s;
 		private Collection<String> cats;
-		private Collection<String> names;
 
-		public TurnoverButton(Socket s, Collection<String> cats, Collection<String> names) {
+		public TurnoverButton(Socket s, Collection<String> cats) {
 			this.s = s;
 			this.cats = cats;
-			this.names = names;
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new TurnoverView(s, cats, names);
+			new TurnoverView(s, cats);
 		}
 
 	}
 
 	/**
-	 * Intern class AttendanceButton. When the user clicks on the button the
-	 * category is sent to server.
+	 * Intern class AttendanceButton. When the user clicks on the button he goes to the Attendance View.
 	 *
 	 */
 	private class AttendanceButton implements ActionListener {
 		private Socket s;
 		private Collection<String> cats;
-		private Collection<String> names;
 
-		public AttendanceButton(Socket s, Collection<String> cats, Collection<String> names) {
+		public AttendanceButton(Socket s, Collection<String> cats) {
 			this.s = s;
 			this.cats = cats;
-			this.names = names;
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new AttendanceView(s, cats, names);
+			new AttendanceView(s, cats);
 		}
 
 	}
 
 	/**
-	 * Intern class ReturnButton. When the user clicks on the button the category is
-	 * sent to server.
+	 * Intern class ReturnButton. When the user clicks on the button he goes to the Return View.
 	 *
 	 */
 	private class ReturnButton implements ActionListener {
@@ -151,65 +141,40 @@ public class MainMenuView extends JFrame {
 
 	}
 
+	/**
+	 * Intern class SignsButton. When the user clicks on the button he goes to the Stores View.
+	 *
+	 */
 	private class SignsButton implements ActionListener {
 		private Socket s;
 
 		public SignsButton(Socket s) {
 			this.s = s;
 		}
+
 		public void actionPerformed(ActionEvent e) {
-			OccupationSocket oS = new OccupationSocket();
-			Calendar c = Calendar.getInstance();
-			String year = String.valueOf(c.get(Calendar.YEAR));
-			Collection<Store> sS = oS.getSigns(s, year);
-			if (sS == null) {
-				JFrame fenResp = new JFrame();
-				JPanel containerResp = new JPanel();
-				fenResp.setSize(150, 150);
-				fenResp.setLocationRelativeTo(null);
-				JLabel jlabResp = new JLabel("No datas");
-				containerResp.add(jlabResp, BorderLayout.CENTER);
-				fenResp.setContentPane(containerResp);
-				fenResp.setVisible(true);
-			} else {
-
-				new SignsResultView(this.s, sS, year);
-
-			}
+			new SignsView(this.s);
 		}
 	}
-	
+
+	/**
+	 * Intern class StoresButton. When the user clicks on the button he goes to the Stores View.
+	 *
+	 */
 	private class StoresButton implements ActionListener {
 		private Socket s;
 
 		public StoresButton(Socket s) {
 			this.s = s;
 		}
+
 		public void actionPerformed(ActionEvent e) {
-			OccupationSocket oS = new OccupationSocket();
-			Calendar c = Calendar.getInstance();
-			String year = String.valueOf(c.get(Calendar.YEAR));
-			Collection<Store> sTNB = oS.getStores(s, year);
-			if (sTNB == null) {
-				JFrame fenResp = new JFrame();
-				JPanel containerResp = new JPanel();
-				fenResp.setSize(150, 150);
-				fenResp.setLocationRelativeTo(null);
-				JLabel jlabResp = new JLabel("No datas");
-				containerResp.add(jlabResp, BorderLayout.CENTER);
-				fenResp.setContentPane(containerResp);
-				fenResp.setVisible(true);
-			} else {
-
-				new StoresResultView(this.s, sTNB, year);
-
-			}
+			new StoresView(this.s);
 		}
 	}
-	
+
 	/**
-	 * Intern class RoyaltiesButton. When the user clicks on the button the
-	 * category is sent to server.
+	 * Intern class RoyaltiesButton. When the user clicks on the button he goes to the Stores View.
 	 *
 	 */
 	private class RoyaltiesButton implements ActionListener {

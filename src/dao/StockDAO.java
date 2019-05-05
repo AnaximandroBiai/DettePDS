@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -65,24 +66,27 @@ public class StockDAO extends Dao<Stock> {
 	 * store
 	 * 
 	 * @param type
+	 * @param month 
 	 * @return Collection
 	 */
-	public Collection<Stock> find(String type) {
+	public Collection<Stock> find(String type, String month) {
 		Collection<Stock> Stocks = new ArrayList<Stock>();
 		ResultSet result = null;
+		Month monthM = Month.valueOf(month);
+		int m = monthM.getValue();
 		try {
 			if(type.equals("All")) {
 				result = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
 								"SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM Stock as S, KeyWord as K, Product as P Where"
-								+ " K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and (month(now()) - month(S.arrivalDate)) = 1");
+								+ " K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and month(S.arrivalDate) = '" + m + "'");
 			}
 			else {
 			result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
 							"SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM Stock as S, KeyWord as K, Product as P Where K.nameKeyWord='"
 									+ type
-									+ "'and K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and (month(now()) - month(S.arrivalDate)) = 1");
+									+ "'and K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and month(S.arrivalDate) = '" + m + "'");
 			}
 			while (result.next()) {
 				Stock stock = new Stock(result.getInt("storeId"), result.getInt("productId"), result.getInt("Quantity"),

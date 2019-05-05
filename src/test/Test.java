@@ -3,7 +3,6 @@ package test;
 
 
 
-import java.sql.Connection;
 import java.util.Collection;
 
 import connection.ConnectionPool;
@@ -56,7 +55,7 @@ public class Test {
 	public boolean turnoverTest() {
 		ConnectionPool p = new ConnectionPool(1);
 		TurnoverDAO testDao = new TurnoverDAO(p.getConnection());
-		Collection<Turnover> testTurnO= testDao.find("Sport");
+		Collection<Turnover> testTurnO= testDao.find("Sport", "2018");
 		if(testTurnO != null) {
 			System.out.println("Success\n");
 			return true;
@@ -70,7 +69,7 @@ public class Test {
 	public boolean clientReturnTest() {
 		ConnectionPool p = new ConnectionPool(1);
 		StockDAO testDao = new StockDAO(p.getConnection());
-		Collection<Stock> testClientR= testDao.find("FastFood");
+		Collection<Stock> testClientR= testDao.find("FastFood", "APRIL");
 		if(testClientR != null) {
 			System.out.println("Success\n");
 			return true;

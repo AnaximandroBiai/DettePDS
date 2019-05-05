@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -66,6 +67,7 @@ public class AttendanceDAO extends Dao<Attendance> {
 	 * of store
 	 * 
 	 * @param type
+	 * @param month 
 	 * @return Collection
 	 */
 	// public Collection<Attendance> find(String type) {
@@ -91,9 +93,11 @@ public class AttendanceDAO extends Dao<Attendance> {
 	// return null;
 	// }
 
-	public Collection<Attendance> find(String type) {
+	public Collection<Attendance> find(String type, String month) {
 		Collection<Attendance> Attendances = new ArrayList<Attendance>();
 		ResultSet result = null;
+		Month monthM = Month.valueOf(month);
+		int m = monthM.getValue();
 		try {
 			if (type.equals("All")) {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
@@ -113,7 +117,7 @@ public class AttendanceDAO extends Dao<Attendance> {
 				ResultSet result2 = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery("SELECT passing FROM LandMark Where storeId='" + a.getStoreId()
-								+ "'and (month(now()) - month(passingDate)) = 1");
+								+ "'and month(passingDate) = '" + m + "'");
 				while (result2.next()) {
 					at += result2.getInt("passing");
 				}

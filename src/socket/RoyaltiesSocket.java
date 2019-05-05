@@ -21,7 +21,7 @@ import pojo.Royalties;
  */
 public class RoyaltiesSocket extends AbstractSocket{
 
-	public Collection<Royalties> getRoyaltiesPaid(Socket s, String cat){
+	public Collection<Royalties> getRoyaltiesPaid(Socket s, String cat, String name, String month){
 		try {
 			GsonBuilder builder = new GsonBuilder();
 			Gson gson = builder.create();
@@ -35,8 +35,36 @@ public class RoyaltiesSocket extends AbstractSocket{
 			String reponse = read(b2);
 			System.out.println(reponse);
 			// Now we send to server the JSON file, with the data to insert
-			w1.write(cat);
-			w1.flush();
+			if (cat.equals("")) {
+				String info = "ByName\n";
+				w1.write(info);
+				w1.flush();
+				String reponseI = read(b2);
+				System.out.println(reponseI);
+				w1.write(name);
+				w1.flush();
+				String reponseN = read(b2);
+				System.out.println(reponseN);
+				w1.write(month);
+				w1.flush();
+				String reponseM = read(b2);
+				System.out.println(reponseM);
+			}
+			else {
+				String info = "ByCategory\n";
+				w1.write(info);
+				w1.flush();
+				String reponseI = read(b2);
+				System.out.println(reponseI);
+				w1.write(cat);
+				w1.flush();
+				String reponseC = read(b2);
+				System.out.println(reponseC);
+				w1.write(month);
+				w1.flush();
+				String reponseM = read(b2);
+				System.out.println(reponseM);
+			}
 			// we read the response from the server
 			String retourServer = read(b2);
 			System.out.println("retour du serveur:" + retourServer);

@@ -64,7 +64,7 @@ public class ServerProcessor implements Runnable {
 					Test t1 = gson.fromJson(request, Test.class);
 					TestDAO testInsert = new TestDAO(this.con);
 					// the DAO check if the person to insert exist in the database
-					Test eCheck = testInsert.find(t1.getLastName(), t1.getFirstName());
+					Test eCheck = testInsert.findT(t1.getLastName(), t1.getFirstName());
 					if (eCheck == null) {
 						testInsert.create(t1);
 						String reponseServ = "" + t1.getFirstName() + " " + t1.getLastName()
@@ -126,9 +126,10 @@ public class ServerProcessor implements Runnable {
 					writer.flush();
 					// the server read the data
 					String toFindT = read();
-					System.out.println("Donnée reçue sur le server: " + toFindT);
+					String toFindTY = read();
+					System.out.println("Donnée reçue sur le server: " + toFindT + ", "+ toFindTY);
 					TurnoverDAO tDaoFind = new TurnoverDAO(con);
-					Collection<Turnover> tFind = tDaoFind.find(toFindT);
+					Collection<Turnover> tFind = tDaoFind.find(toFindT, toFindTY);
 					String jsonFindT = gson.toJson(tFind);
 					// the server looks and find (or not) the data asked and return his answer to
 					// the client
@@ -179,9 +180,10 @@ public class ServerProcessor implements Runnable {
 					writer.flush();
 					//the server read the data
 					String toFindA = read();
-					System.out.println("Donnée reçue sur le server: "+toFindA);
+					String toFindAM = read();
+					System.out.println("Donnée reçue sur le server: " + toFindA + ", " + toFindAM);
 					AttendanceDAO aDaoFind = new AttendanceDAO(con);
-					Collection<Attendance> aFind = aDaoFind.find(toFindA);
+					Collection<Attendance> aFind = aDaoFind.find(toFindA, toFindAM);
 					String jsonFindF = gson.toJson(aFind);
 					//the server looks and find (or not) the data asked and return his answer to the client
 					if(jsonFindF == null){
@@ -204,9 +206,10 @@ public class ServerProcessor implements Runnable {
 					writer.flush();
 					//the server read the data
 					String toFindR = read();
-					System.out.println("Donnée reçue sur le server: "+toFindR);
+					String toFindRM = read();
+					System.out.println("Donnée reçue sur le server: " + toFindR + ", " + toFindRM);
 					StockDAO rDaoFind = new StockDAO(con);
-					Collection<Stock> rFind = rDaoFind.find(toFindR);
+					Collection<Stock> rFind = rDaoFind.find(toFindR, toFindRM);
 					String jsonFindR = gson.toJson(rFind);
 					//the server looks and find (or not) the data asked and return his answer to the client
 					if(jsonFindR == null){
@@ -301,10 +304,27 @@ public class ServerProcessor implements Runnable {
 					writer.write(toSendRP);
 					writer.flush();
 					// the server read the data
-					String toFindRP = read();
-					System.out.println("Donnée reçue sur le server: " + toFindRP);
 					RoyaltiesDAO rPDaoFind = new RoyaltiesDAO(con);
-					Collection<Royalties> rPFind = rPDaoFind.findRoyaltiesPaid(toFindRP);
+					String toFindRP = read();
+					String received1 = "Well received : " +toFindRP;
+					writer.write(received1);
+					writer.flush();
+					String toFindRPByCatOrName = read();
+					String received2 = "Well received : " +toFindRPByCatOrName;
+					writer.write(received2);
+					writer.flush();
+					String toFindRPM = read();
+					String received3 = "Well received : " +toFindRPM;
+					writer.write(received3);
+					writer.flush();
+					System.out.println("Données reçues sur le server: " + toFindRP + ", " + toFindRPByCatOrName + ", " + toFindRPM);
+					Collection<Royalties> rPFind = null;
+					if (toFindRP.equals("ByCategory\n")){
+						rPFind = rPDaoFind.findRoyaltiesPaid(toFindRPByCatOrName, toFindRPM);
+					}
+					else if(toFindRP.equals("ByName\n")){
+					rPFind = rPDaoFind.findRoyaltiesPaidByName(toFindRPByCatOrName, toFindRPM);
+					}
 					String jsonFindRP = gson.toJson(rPFind);
 					// the server looks and find (or not) the data asked and return his answer to
 					// the client

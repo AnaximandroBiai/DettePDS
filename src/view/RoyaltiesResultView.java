@@ -24,15 +24,15 @@ import socket.StoreSocket;
  * @version 1.0 This is the Royalties view which display the results of the
  *          research
  */
-public class RoyaltiesResultView extends JFrame{
+public class RoyaltiesResultView extends JFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private Font policeDette = new Font("Arial", Font.BOLD, 28);
-	
-	public RoyaltiesResultView(Socket s, Collection<Royalties> royaltiesPaid, String cat) {
-		
+
+	public RoyaltiesResultView(Socket s, Collection<Royalties> royaltiesPaid, String cat, String name, String month) {
+
 		StoreSocket sTS = new StoreSocket();
 
 		this.setTitle("PhyGit Mall: Royalties Indicator");
@@ -41,8 +41,13 @@ public class RoyaltiesResultView extends JFrame{
 		this.setResizable(false);
 		Collection<Royalties> rSP = royaltiesPaid;
 		JLabel dette = new JLabel("PhyGit Mall");
-		JLabel resultats = new JLabel("Past month royalties for the stores of the category :" + cat);
-
+		JLabel resultats = null;
+		if (cat.equals("")) {
+			resultats = new JLabel("Past month royalties for the store " + name + " at " + month + " month");
+		} else {
+			resultats = new JLabel(
+					"Past month royalties for the stores of the category : " + cat + " at " + month + " month");
+		}
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
 		JPanel east = new JPanel();
@@ -70,7 +75,7 @@ public class RoyaltiesResultView extends JFrame{
 		top.add(resultats);
 
 		if (!rSP.isEmpty()) {
-			
+
 			RoyaltiesSocket rS = new RoyaltiesSocket();
 			for (Royalties r : rSP) {
 
@@ -78,14 +83,15 @@ public class RoyaltiesResultView extends JFrame{
 				Royalties rA = rS.getRoyaltiesAsked(s, r.getStoreId());
 
 				JLabel result = new JLabel("Store : " + sT.getStoreName() + "  |  Royalties asked : "
-						+ String.valueOf(rA.getAmount()) + "€ | Royalties paid : " + String.valueOf(r.getAmount()) +" € | Royalties due : " +String.valueOf((rA.getAmount() - r.getAmount()) +"€\n"));
+						+ String.valueOf(rA.getAmount()) + "€ | Royalties paid : " + String.valueOf(r.getAmount())
+						+ " € | Royalties due : " + String.valueOf((rA.getAmount() - r.getAmount()) + "€\n"));
 				center.add(result);
 			}
 		} else {
-			JLabel result = new JLabel("No datas for this sector");
+			JLabel result = new JLabel("No datas for this month");
 			center.add(result);
 		}
-		
+
 		this.add(top, BorderLayout.NORTH);
 		this.add(west, BorderLayout.WEST);
 		this.add(east, BorderLayout.EAST);

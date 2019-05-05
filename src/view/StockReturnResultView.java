@@ -84,7 +84,7 @@ public class StockReturnResultView extends JFrame {
 		}
 		}
 		else {
-			JLabel result = new JLabel("No returns for this type");
+			JLabel result = new JLabel("No returns for this type at this month");
 			center.add(result);
 		}
 		this.add(top, BorderLayout.NORTH);
