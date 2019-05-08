@@ -88,13 +88,13 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 			if (type.equals("All")) {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeId = R.storeId and month(R.royaltiesDate) = '" + m + "'");
+								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeId = R.storeId and month(R.royaltiesDate) = '" + m + "' and year(R.royaltiesDate) = year(now())");
 			} else {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
 								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeCategory ='" 
 								+type
-								+"' and S.storeId = R.storeId and month(R.royaltiesDate) = '" + m + "'");
+								+"' and S.storeId = R.storeId and month(R.royaltiesDate) = '" + m + "' and year(R.royaltiesDate) = year(now())");
 			}
 			while (result.next()) {
 				Royalties rP = new Royalties(result.getInt("royaltiesPaid"), result.getInt("storeId"));

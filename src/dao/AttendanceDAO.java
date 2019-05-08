@@ -117,7 +117,7 @@ public class AttendanceDAO extends Dao<Attendance> {
 				ResultSet result2 = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery("SELECT passing FROM LandMark Where storeId='" + a.getStoreId()
-								+ "'and month(passingDate) = '" + m + "'");
+								+ "'and month(passingDate) = '" + m + "' and year(passingDate) = year(now())");
 				while (result2.next()) {
 					at += result2.getInt("passing");
 				}

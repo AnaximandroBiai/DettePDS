@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 import pojo.Store;
@@ -30,7 +31,7 @@ public class TurnoverResultView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Font policeDette = new Font("Arial", Font.BOLD, 28);
 
-	public TurnoverResultView(Socket s, Collection<Turnover> turnovers, String cat) {
+	public TurnoverResultView(Socket s, Collection<Turnover> turnovers, String cat, String year) {
 
 		StoreSocket sTS = new StoreSocket();
 
@@ -40,7 +41,7 @@ public class TurnoverResultView extends JFrame {
 		this.setResizable(false);
 		Collection<Turnover> ts = turnovers;
 		JLabel dette = new JLabel("PhyGit Mall");
-		JLabel resultats = new JLabel("Past year turnover for the stores of the category :" + cat);
+		JLabel resultats = new JLabel("Turnover for the stores of the category :" + cat + " for the year " + year);
 
 		JPanel top = new JPanel();
 		JPanel west = new JPanel();
@@ -49,7 +50,7 @@ public class TurnoverResultView extends JFrame {
 		JPanel bot = new JPanel();
 
 		top.setPreferredSize(new Dimension(50, 125));
-		center.setPreferredSize(new Dimension(700, 400));
+		center.setSize(new Dimension(700, 400));
 		center.setBorder(BorderFactory.createLineBorder(Color.black));
 		west.setPreferredSize(new Dimension(50, 300));
 		east.setPreferredSize(new Dimension(50, 300));
@@ -63,6 +64,7 @@ public class TurnoverResultView extends JFrame {
 		center.setLayout(layoutCenter);
 		east.setLayout(layoutEast);
 		west.setLayout(layoutWest);
+		JScrollPane jsp = new JScrollPane(center);
 
 		dette.setFont(policeDette);
 		top.add(dette);
@@ -77,7 +79,7 @@ public class TurnoverResultView extends JFrame {
 				center.add(result);
 			}
 		} else {
-			JLabel result = new JLabel("No datas for this sector");
+			JLabel result = new JLabel("No datas for this sector for this year");
 			center.add(result);
 		}
 
@@ -85,7 +87,7 @@ public class TurnoverResultView extends JFrame {
 		this.add(west, BorderLayout.WEST);
 		this.add(east, BorderLayout.EAST);
 		this.add(bot, BorderLayout.SOUTH);
-		this.add(center, BorderLayout.CENTER);
+		this.add(jsp, BorderLayout.CENTER);
 
 		this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.setVisible(true);

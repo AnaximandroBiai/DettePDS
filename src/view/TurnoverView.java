@@ -115,7 +115,7 @@ public class TurnoverView extends JFrame{
 				fenResp.setVisible(true);
 			} else {
 				
-				new TurnoverResultView(this.s, tOS, cat);
+				new TurnoverResultView(this.s, tOS, cat, year);
 				
 				}
 			}

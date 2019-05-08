@@ -86,15 +86,17 @@ public class ServerProcessor implements Runnable {
 					// the Server send the response to the demand
 					writer.write(toConnect);
 					writer.flush();
+					String wait = read();
+					System.out.println(wait);
 					Connection conC = conP.getConnection();
 					if (conC == null) {
-						String json = "No connection available, try later\n";
+						String json = "REFUSED\n";
 						writer.write(json);
 						writer.flush();
 						sock.close();
 					} else {
 						this.con = conC;
-						String json = "Connection Done\n";
+						String json = "ACCEPTED\n";
 						writer.write(json);
 						writer.flush();
 						TestDAO datas = new TestDAO(this.con);

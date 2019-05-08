@@ -79,14 +79,14 @@ public class StockDAO extends Dao<Stock> {
 				result = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
 								"SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM Stock as S, KeyWord as K, Product as P Where"
-								+ " K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and month(S.arrivalDate) = '" + m + "'");
+								+ " K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and month(S.arrivalDate) = '" + m + "' and year(S.arrivalDate) = year(now())");
 			}
 			else {
 			result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
 							"SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM Stock as S, KeyWord as K, Product as P Where K.nameKeyWord='"
 									+ type
-									+ "'and K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and month(S.arrivalDate) = '" + m + "'");
+									+ "'and K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and month(S.arrivalDate) = '" + m + "' and year(S.arrivalDate) = year(now())");
 			}
 			while (result.next()) {
 				Stock stock = new Stock(result.getInt("storeId"), result.getInt("productId"), result.getInt("Quantity"),

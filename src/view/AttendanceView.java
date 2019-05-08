@@ -116,7 +116,7 @@ public class AttendanceView extends JFrame{
 				fenResp.setVisible(true);
 			} else {
 				
-				new AttendanceResultView(this.s, aOS, cat);
+				new AttendanceResultView(this.s, aOS, cat, month);
 				
 				}
 			}
