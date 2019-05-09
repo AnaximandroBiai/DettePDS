@@ -62,7 +62,7 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 		try {
 		result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT L.area, L.occupancyRate, O.storeId FROM Location as L, Occupation as O, Store as S, RoyaltiesHistory as R Where R.storeId = "
+								"SELECT L.area, L.occupancyRate, O.storeId FROM location as L, occupation as O, store as S, royaltieshistory as R Where R.storeId = "
 										+ id + " and R.storeId = S.storeId and S.storeId = O.storeId and O.locationId = L.locationId");
 			while (result.next()) {
 				int amount = (int) (166 * Math.sqrt(result.getInt("area")));
@@ -88,11 +88,11 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 			if (type.equals("All")) {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeId = R.storeId and month(R.royaltiesDate) = '" + m + "' and year(R.royaltiesDate) = year(now())");
+								"SELECT R.storeId, R.royaltiesPaid FROM royaltieshistory as R, store as S Where S.storeId = R.storeId and month(R.royaltiesDate) = '" + m + "' and year(R.royaltiesDate) = year(now())");
 			} else {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeCategory ='" 
+								"SELECT R.storeId, R.royaltiesPaid FROM royaltieshistory as R, store as S Where S.storeCategory ='" 
 								+type
 								+"' and S.storeId = R.storeId and month(R.royaltiesDate) = '" + m + "' and year(R.royaltiesDate) = year(now())");
 			}
@@ -116,7 +116,7 @@ public class RoyaltiesDAO extends Dao<Royalties> {
 		try {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT R.storeId, R.royaltiesPaid FROM RoyaltiesHistory as R, Store as S Where S.storeName = '" 
+								"SELECT R.storeId, R.royaltiesPaid FROM royaltieshistory as R, store as S Where S.storeName = '" 
 								+name
 								+"' and S.storeId = R.storeId and month(R.royaltiesDate) = '" + m + "'");
 			while (result.next()) {

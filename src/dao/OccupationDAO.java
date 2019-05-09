@@ -118,7 +118,7 @@ public class OccupationDAO extends Dao<Occupation> {
 		try {
 				result = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-						.executeQuery("SELECT * from Occupation Where year(arrivalDate) <= "+ year + " and (year (departureDate) = 0000 or year(departureDate) > '"+ year +"')");
+						.executeQuery("SELECT * from occupation Where year(arrivalDate) <= "+ year + " and (year (departureDate) = 0000 or year(departureDate) > '"+ year +"')");
 			while (result.next()) {
 				Occupation o = new Occupation(result.getInt("locationId"), result.getInt("storeId"), result.getString("arrivalDate"), "");
 				Stores.add(o);

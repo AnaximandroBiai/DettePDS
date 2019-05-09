@@ -13,7 +13,7 @@ public class Database {
 	private static final String driver_name ="com.mysql.jdbc.Driver";
 	private static final String url = "jdbc:mysql://localhost/dette";
 	private static final String user = "root";
-	private static final String password = "";
+	private static final String password = "123";
 	
 	/**
 	 * static methods with create an instance of the jdbc driver.

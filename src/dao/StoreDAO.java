@@ -62,7 +62,7 @@ public class StoreDAO extends Dao<Store> {
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT storeId, storeName, storeCategory, storeArea FROM Store Where storeId='"
+							"SELECT storeId, storeName, storeCategory, storeArea FROM store Where storeId='"
 									+ storeId+"'");
 			while (result.next()) {
 				Store st = new Store(result.getInt("storeId"), result.getString("storeName"),

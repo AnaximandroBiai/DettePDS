@@ -105,7 +105,7 @@ public class TestDAO extends Dao<Test>{
 	public Collection<String> findCategories() {
 		Collection<String> categories = new ArrayList<String>();
 		  try{
-	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT storeCategory FROM Store");
+	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT storeCategory FROM store");
 	            while(result.next()) {
 	            	String cat = result.getString("storeCategory");
 	            	categories.add(cat);
@@ -124,7 +124,7 @@ public class TestDAO extends Dao<Test>{
 	public Collection<String> findTypes() {
 		Collection<String> types = new ArrayList<String>();
 		  try{
-	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT nameKeyWord FROM KeyWord");
+	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT nameKeyWord FROM keyword");
 	            while(result.next()) {
 	            	String type = result.getString("nameKeyWord");
 	            	types.add(type);
@@ -143,7 +143,7 @@ public class TestDAO extends Dao<Test>{
 	public Collection<String> findNames() {
 		Collection<String> names = new ArrayList<String>();
 		  try{
-	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT storeName FROM Store");
+	            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT storeName FROM store");
 	            while(result.next()) {
 	            	String name = result.getString("storeName");
 	            	names.add(name);

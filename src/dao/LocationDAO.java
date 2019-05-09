@@ -63,7 +63,7 @@ public class LocationDAO extends Dao<Location> {
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT locationId, location, area, category, occupancyRate FROM Location Where locationId="
+							"SELECT locationId, location, area, category, occupancyRate FROM location Where locationId="
 									+ locationId);
 			while (result.next()) {
 				Location loc = new Location(result.getInt("locationId"), result.getString("location"),
@@ -86,7 +86,7 @@ public class LocationDAO extends Dao<Location> {
 			int cpt = 0;
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT COUNT(locationId) as count FROM Location");
+					.executeQuery("SELECT COUNT(locationId) as count FROM location");
 			while (result.next()) {
 				cpt = result.getInt("count");
 			}

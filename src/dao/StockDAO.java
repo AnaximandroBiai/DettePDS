@@ -78,13 +78,13 @@ public class StockDAO extends Dao<Stock> {
 			if(type.equals("All")) {
 				result = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-								"SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM Stock as S, KeyWord as K, Product as P Where"
+								"SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM stock as S, keyword as K, product as P Where"
 								+ " K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and month(S.arrivalDate) = '" + m + "' and year(S.arrivalDate) = year(now())");
 			}
 			else {
 			result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM Stock as S, KeyWord as K, Product as P Where K.nameKeyWord='"
+							"SELECT S.storeId, S.productId, S.quantity, S.arrivalDate, S.arrivalReason FROM stock as S, keyword as K, product as P Where K.nameKeyWord='"
 									+ type
 									+ "'and K.idKeyWord = P.keyword and P.productId = S.productId and arrivalReason = 'retourclient' and month(S.arrivalDate) = '" + m + "' and year(S.arrivalDate) = year(now())");
 			}

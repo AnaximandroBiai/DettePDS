@@ -102,10 +102,10 @@ public class AttendanceDAO extends Dao<Attendance> {
 			if (type.equals("All")) {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 						.executeQuery(
-								"SELECT DISTINCT l.storeId FROM LandMark as l, Store as S Where S.storeId = l.storeId");
+								"SELECT DISTINCT l.storeId FROM landmark as l, store as S Where S.storeId = l.storeId");
 			} else {
 				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-						.executeQuery("SELECT DISTINCT l.storeId FROM LandMark as l, Store as S Where S.storeCategory='"
+						.executeQuery("SELECT DISTINCT l.storeId FROM landmark as l, store as S Where S.storeCategory='"
 								+ type + "'and S.storeId = l.storeId");
 			}
 			while (result.next()) {
@@ -116,7 +116,7 @@ public class AttendanceDAO extends Dao<Attendance> {
 				int at = 0;
 				ResultSet result2 = this.connect
 						.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-						.executeQuery("SELECT passing FROM LandMark Where storeId='" + a.getStoreId()
+						.executeQuery("SELECT passing FROM landmark Where storeId='" + a.getStoreId()
 								+ "'and month(passingDate) = '" + m + "' and year(passingDate) = year(now())");
 				while (result2.next()) {
 					at += result2.getInt("passing");

@@ -128,15 +128,15 @@ public class MainMenuView extends JFrame {
 	 */
 	private class ReturnButton implements ActionListener {
 		private Socket s;
-		private Collection<String> cats;
+		private Collection<String> types;
 
 		public ReturnButton(Socket s, Collection<String> types) {
 			this.s = s;
-			this.cats = types;
+			this.types = types;
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new StockReturnView(s, cats);
+			new StockReturnView(s, types);
 		}
 
 	}
